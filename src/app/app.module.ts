@@ -11,8 +11,8 @@ import { registerLocaleData } from '@angular/common';
 import pt from '@angular/common/locales/pt';
 import { LoginComponent } from './pages/login/login.component';
 import { LogoComponent } from './components/atoms/logo/logo.component';
-import { InputComponent } from './components/atoms/input/input.component';
-import { ButtonComponent } from './components/atoms/button/button.component';
+import { HomeComponent } from './pages/home/home.component';
+import { TaskComponent } from './pages/task/task.component';
 
 registerLocaleData(pt);
 
@@ -21,8 +21,8 @@ registerLocaleData(pt);
     AppComponent,
     LoginComponent,
     LogoComponent,
-    InputComponent,
-    ButtonComponent
+    HomeComponent,
+    TaskComponent
   ],
   imports: [
     BrowserModule,

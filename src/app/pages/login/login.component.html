@@ -7,21 +7,21 @@
       <nz-form-item>
         <nz-form-control nzErrorTip="E-mail inválido">
           <nz-input-group nzPrefixIcon="mail">
-            <input type="email" nz-input formControlName="email" placeholder="E-mail" />
+            <input type="email" nz-input formControlName="email" placeholder="E-mail"/>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control nzErrorTip="Senha incorreta!">
+        <nz-form-control nzErrorTip="Informe sua senha!">
           <nz-input-group nzPrefixIcon="lock">
-            <input type="password" nz-input formControlName="password" placeholder="Senha" />
+            <input type="password" nz-input formControlName="password" placeholder="Senha"/>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-control>
           <a class="login__container__form__forgot">Esqueci minha senha</a>
-          <button nz-button class="login__container__form__button" [nzType]="'primary'">Entrar</button>
+          <button nz-button class="login__container__form__button" [nzType]="'primary'" nzSize="large" [routerLink]="['/home']">Entrar</button>
           <div class="login__container__form__sign-up">
             <a>Não possui uma conta? <b>Cadastre-se</b></a>
           </div>

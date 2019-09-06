@@ -1,8 +1,57 @@
 /* You can add global styles to this file, and also import other style files */
-.ant-input, .ant-btn {
+.ant-input {
   height: 40px;
+  padding: 6px 11px;
+  font-size: 16px;
+  line-height: 40px;
 }
 
-.ant-input, .ant-btn, .ant-form-item {
+.ant-tabs {
+  height: 100%;
+
+  & .ant-tabs-bottom-content.ant-tabs-content-animated {
+    height: calc(100% - 55px);
+  }
+}
+.ant-tabs-bar {
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
+}
+.ant-tabs-bottom .ant-tabs-bottom-bar {
+  margin: 0;
+}
+.ant-tabs-nav {
+  & div:first-child {
+    display: flex;
+  }
+  & .ant-tabs-tab {
+    margin: 0;
+    width: 50vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.ant-page-header {
   font-size: 16px;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
+  z-index: 1;
+}
+
+.ant-calendar-picker-input.ant-input, .ant-calendar-input-wrap {
+  display: none;
+}
+.cdk-overlay-pane {
+  margin-top: -14px;
+  left: auto !important;
+  right: 0 !important;
+}
+
+.ant-badge .ant-scroll-number-custom-component {
+  top: auto;
+  bottom: -7px;
+}
+
+.ant-tag {
+  margin: 0;
 }

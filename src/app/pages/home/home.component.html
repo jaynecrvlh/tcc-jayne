@@ -1,0 +1,51 @@
+<article class="home">
+  <nz-tabset nzTabPosition="bottom" nzSize="large">
+    <nz-tab [nzTitle]="routineTemplate">
+      <ng-template #routineTemplate><i nz-icon nzType="schedule"></i>Rotina</ng-template>
+      <nz-page-header>
+        <nz-page-header-title>Rotina</nz-page-header-title>
+        <nz-page-header-subtitle>Sexta, 06 de setembro</nz-page-header-subtitle>
+        <nz-page-header-extra>
+          <i nz-icon nzType="calendar" nzTheme="outline" (click)="toggleDatePicker()"></i>
+        </nz-page-header-extra>
+      </nz-page-header>
+      <nz-date-picker [nzOpen]="openDatePicker" [(ngModel)]="date" (ngModelChange)="onChangeDate($event)"></nz-date-picker>
+      <section class="home__routine__list">
+        <nz-list [nzDataSource]="data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" [nzLoading]="loading">
+          <ng-template #item let-item>
+            <nz-list-item [nzExtra]="taskTag" class="home__routine__list__item" [ngClass]="{'task-done': item.done}" [routerLink]="['/task', item.id]" routerLinkActive="router-link-active" >
+              <nz-list-item-meta
+                [nzTitle]="taskTitle"
+                [nzAvatar]="taskAvatar"
+                [nzDescription]="'Responsável: ' + item.responsible.name"
+              >
+                <ng-template #taskTitle>
+                  <a href="https://ng.ant.design">{{ item.title }}</a>
+                </ng-template>
+                <ng-template #taskAvatar>
+                  <nz-badge [nzCount]="item.done ? checked : 0">
+                    <nz-avatar [nzSize]="64" nzIcon="user" [nzSrc]="item.responsible.avatar"></nz-avatar>
+                  </nz-badge>
+                  <ng-template #checked>
+                    <i nz-icon nzType="check-circle" nzTheme="fill" class="ant-scroll-number-custom-component" style="color: #00AA00; font-size: 20px;"></i>
+                  </ng-template>
+                </ng-template>
+              </nz-list-item-meta>
+              <ng-template #taskTag>
+                <div class="home__routine__list__item__hour-container">
+                  <nz-tag [nzColor]="item.category.color">{{item.category.name}}</nz-tag>
+                  <div class="home__routine__list__item__hour-container__hour">{{item.hour}}</div>
+                </div>
+              </ng-template>
+            </nz-list-item>
+          </ng-template>
+        </nz-list>
+      </section>
+      <button class="home__routine__add-btn" nz-button nzType="primary" nzSize="large" nzShape="circle"><i nz-icon nzType="plus"></i></button>
+    </nz-tab>
+    <nz-tab [nzTitle]="profileTemplate">
+      <ng-template #profileTemplate><i nz-icon nzType="user"></i>Perfil</ng-template>
+      <nz-page-header nzTitle="Perfil"></nz-page-header>
+    </nz-tab>
+  </nz-tabset>
+</article>
