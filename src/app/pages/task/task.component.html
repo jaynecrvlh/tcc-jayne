@@ -50,7 +50,9 @@
           </nz-form-item>
         </nz-comment-content>
       </nz-comment>
-      <button nz-button nzType="primary" nzSize="large" nzBlock><i nz-icon nzType="check"></i>Atividade realizada</button>
+      <button nz-button nzType="primary" nzSize="large" nzBlock (click)="showConfirm()">
+        <i nz-icon nzType="check"></i>Atividade realizada
+      </button>
     </div>
   </section>
 </article>

@@ -1,8 +1,5 @@
-.login {
+.sign-up {
   height: 100vh;
-  // background-image: url('../../../assets/images/login-bg.png');
-  // background-size: cover;
-  // background-position: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -18,16 +15,12 @@
     }
 
     &__form {
-      &__forgot {
-        float: right;
-      }
-      
       &__button {
         margin-top: 10px;
         width: 100%;
       }
 
-      &__sign-up {
+      &__login {
         margin-top: 10px;
         text-align: center;
       }

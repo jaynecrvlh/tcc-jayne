@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { distanceInWords } from 'date-fns';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-task',
@@ -9,7 +10,7 @@ import { distanceInWords } from 'date-fns';
 })
 export class TaskComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private modalService: NzModalService) { }
 
   ngOnInit() {
   }
@@ -51,4 +52,10 @@ export class TaskComponent implements OnInit {
     }, 800);
   }
 
+  showConfirm(): void {
+    this.modalService.confirm({
+      nzTitle: 'Deseja marcar esta atividade como feita?',
+      nzOnOk: () => console.log('OK')
+    });
+  }
 }

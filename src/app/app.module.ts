@@ -9,10 +9,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
 import pt from '@angular/common/locales/pt';
+import { environment } from '../environments/environment';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+
 import { LoginComponent } from './pages/login/login.component';
-import { LogoComponent } from './components/atoms/logo/logo.component';
+import { LogoComponent } from './components/logo/logo.component';
 import { HomeComponent } from './pages/home/home.component';
 import { TaskComponent } from './pages/task/task.component';
+import { SignUpComponent } from './pages/sign-up/sign-up.component';
 
 registerLocaleData(pt);
 
@@ -22,7 +28,8 @@ registerLocaleData(pt);
     LoginComponent,
     LogoComponent,
     HomeComponent,
-    TaskComponent
+    TaskComponent,
+    SignUpComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +38,10 @@ registerLocaleData(pt);
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
+    AngularFireDatabaseModule
   ],
   providers: [{ provide: NZ_I18N, useValue: pt_BR }],
   bootstrap: [AppComponent]
