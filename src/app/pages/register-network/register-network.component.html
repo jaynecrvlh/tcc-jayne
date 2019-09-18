@@ -1,0 +1,62 @@
+<article class="register-network">
+  <nz-page-header (nzBack)="onBack()" nzBackIcon nzTitle="Criar rede de cuidados"></nz-page-header>
+  <section class="register-network__content">
+    <form class="register-network__content__form" nz-form [formGroup]="validateForm" (ngSubmit)="onRegisterNetwork()">
+      <div class="register-network__content__form__upload-photo">
+        <nz-upload
+          class="avatar-uploader"
+          nzAction="https://jsonplaceholder.typicode.com/posts/"
+          nzName="avatar"
+          nzListType="picture-card"
+          [nzShowUploadList]="false"
+          (nzChange)="handleChange($event)"
+        >
+          <ng-container *ngIf="!avatarUrl">
+            <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+            <div class="ant-upload-text">Foto</div>
+          </ng-container>
+          <img *ngIf="avatarUrl" [src]="avatarUrl" class="avatar" />
+        </nz-upload>
+      </div>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Informe o nome do idoso(a)">
+          <nz-input-group nzPrefixIcon="user">
+            <input type="text" nz-input formControlName="name" placeholder="Nome do idoso(a)" [(ngModel)]="name" nzRequired/>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-date-picker nzClassName="register-network-date-picker" formControlName="dateOfBirth" nzPlaceHolder="Data de nascimento" [(ngModel)]="dateOfBirth"></nz-date-picker>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="genre">Sexo:</nz-form-label>
+        <nz-radio-group formControlName="genre" [(ngModel)]="genre" nzButtonStyle="solid" nzSize="large">
+          <label nz-radio-button nzValue="Feminino">Feminino</label>
+          <label nz-radio-button nzValue="Masculino">Masculino</label>
+        </nz-radio-group>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-select formControlName="bloodType" style="width: 100%;" nzPlaceHolder="Tipo sanguíneo" [(ngModel)]="bloodType" nzSize="large">
+          <nz-option *ngFor="let option of listOfBloodType" [nzLabel]="option.label" [nzValue]="option.value"> </nz-option>
+        </nz-select>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-select formControlName="specialNeeds" nzMode="tags" style="width: 100%;" nzPlaceHolder="Necessidades especiais" [(ngModel)]="specialNeeds" nzSize="large">
+          <nz-option *ngFor="let option of listOfSpecialNeeds" [nzLabel]="option.label" [nzValue]="option.value"> </nz-option>
+        </nz-select>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-select formControlName="interests" nzMode="tags" style="width: 100%;" nzPlaceHolder="Interesses" [(ngModel)]="interests" nzSize="large">
+          <nz-option-group *ngFor="let optionGroup of listOfInterests" [nzLabel]="optionGroup.label">
+            <nz-option *ngFor="let option of optionGroup.items" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+          </nz-option-group>
+        </nz-select>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <button nz-button class="register-network__content__form__button" [nzType]="'primary'" nzSize="large" nzBlock>Criar rede</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </section>
+</article>

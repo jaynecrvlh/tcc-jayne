@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { User } from 'src/app/models/user';
+import { AuthService } from '../../services/auth/auth.service';
+import { UserService } from '../../services/user/user.service';
+import { NetworkService } from '../../services/network/network.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +15,8 @@ export class HomeComponent implements OnInit {
   user: User;
   date = null;
   openDatePicker = false;
-  loading = false;
+  loadingNetworks = true;
+  myNetworks = [];
   data = [
     {
       id: 1,
@@ -112,12 +117,37 @@ export class HomeComponent implements OnInit {
       }
     }
   ];
+  codeModal = false;
+  networkCode:string;
 
-  constructor() { }
+  constructor(private authService: AuthService, private userService: UserService, private networkService: NetworkService, private router: Router, private ngZone: NgZone) { }
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem('tccJayneUser'));
-    console.log(this.user);
+    let userSaved = JSON.parse(localStorage.getItem('tccJayneUser'));
+    this.user = new User(
+      userSaved.id,
+      userSaved.photo,
+      userSaved.firstName,
+      userSaved.lastName,
+      userSaved.email,
+      userSaved.password,
+      []
+    );
+    this.userService.currentUser = this.user;
+    this.networkService.getUserNetworks(this.user.getId())
+    .on("value", snapshot => {
+      if(snapshot.val() !== undefined && snapshot.val() !== null) {
+        this.ngZone.run(() => {
+          const networks = Object.entries(snapshot.val()).map(e => Object.assign(e[1], { key: e[0] }));
+          this.myNetworks = networks;
+          console.log(this.myNetworks);
+          this.loadingNetworks = false;
+        });
+      }
+      else {
+        this.loadingNetworks = false;
+      }
+    });
   }
 
   onChangeDate(result: Date): void {
@@ -128,4 +158,24 @@ export class HomeComponent implements OnInit {
     this.openDatePicker = !this.openDatePicker;
   }
 
+  showCodeModal(): void {
+    this.codeModal = true;
+  }
+
+  handleOk(): void {
+    this.networkService.signNetwork(this.user.getId(), this.networkCode)
+    .then(() => {
+      this.router.navigate(['home']);
+    }).catch(error => error);
+    this.codeModal = false;
+  }
+
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.codeModal = false;
+  }
+
+  onLogout() {
+    this.authService.logoff();
+  }
 }

@@ -1,9 +1,25 @@
 <article class="sign-up">
   <section class="sign-up__container">
-    <div class="sign-up__container__logo">
+    <!-- <div class="sign-up__container__logo">
       <ag-logo></ag-logo>
-    </div>
+    </div> -->
     <form class="sign-up__container__form" nz-form [formGroup]="validateForm" (ngSubmit)="registerUser()">
+      <div class="sign-up__container__form__upload-photo">
+        <nz-upload
+          class="avatar-uploader"
+          nzAction="https://jsonplaceholder.typicode.com/posts/"
+          nzName="avatar"
+          nzListType="picture-card"
+          [nzShowUploadList]="false"
+          (nzChange)="handleChange($event)"
+        >
+          <ng-container *ngIf="!avatarUrl">
+            <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+            <div class="ant-upload-text">Foto</div>
+          </ng-container>
+          <img *ngIf="avatarUrl" [src]="avatarUrl" class="avatar" />
+        </nz-upload>
+      </div>
       <nz-form-item>
         <nz-form-control nzErrorTip="Informe seu nome">
           <nz-input-group nzPrefixIcon="user">

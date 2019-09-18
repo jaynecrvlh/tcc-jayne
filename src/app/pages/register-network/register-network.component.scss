@@ -1,0 +1,26 @@
+.register-network {
+  &__content {
+    padding: 30px;
+
+    &__form {
+      &__upload-photo {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+}
+.upload-icon {
+  font-size: 32px;
+  color: #999;
+}
+.ant-upload-text {
+  margin-top: 8px;
+  color: #666;
+}

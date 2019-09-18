@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { RegisterService } from 'src/app/services/register/register.service';
-import { UserService } from '../../services/user/user.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { UploadFile } from 'ng-zorro-antd/upload';
 
 @Component({
   selector: 'app-sign-up',
@@ -10,6 +11,8 @@ import { UserService } from '../../services/user/user.service';
 })
 export class SignUpComponent implements OnInit {
 
+  loadingPhoto = false;
+  avatarUrl: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -22,6 +25,7 @@ export class SignUpComponent implements OnInit {
       this.validateForm.controls[i].updateValueAndValidity();
     }
 
+    this.registerService.user.setPhoto(this.avatarUrl);
     this.registerService.user.setFirstName(this.firstName);
     this.registerService.user.setLastName(this.lastName);
     this.registerService.user.setEmail(this.email);
@@ -42,7 +46,7 @@ export class SignUpComponent implements OnInit {
     return {};
   };
 
-  constructor(private fb: FormBuilder, private registerService:RegisterService, private userService:UserService) { }
+  constructor(private fb: FormBuilder, private registerService:RegisterService, private msg: NzMessageService) { }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
@@ -54,4 +58,28 @@ export class SignUpComponent implements OnInit {
     });
   }
 
+  private getBase64(img: File, callback: (img: string) => void): void {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result!.toString()));
+    reader.readAsDataURL(img);
+  }
+
+  handleChange(info: { file: UploadFile }): void {
+    switch (info.file.status) {
+      case 'uploading':
+        this.loadingPhoto = true;
+        break;
+      case 'done':
+        // Get this url from response in real world.
+        this.getBase64(info.file!.originFileObj!, (img: string) => {
+          this.loadingPhoto = false;
+          this.avatarUrl = img;
+        });
+        break;
+      case 'error':
+        this.msg.error('Network error');
+        this.loadingPhoto = false;
+        break;
+    }
+  }
 }

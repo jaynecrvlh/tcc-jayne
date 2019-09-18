@@ -14,10 +14,12 @@ export class UserService {
     if(user != null) {
       let obj = new User(
         user.id,
-        user.firstName, 
+        user.photo,
+        user.firstName,
         user.lastName, 
         user.email,
-        "secretPassword"
+        "secretPassword",
+        []
       )
       this.currentUser = obj;
     }
@@ -25,5 +27,9 @@ export class UserService {
 
   getUserInfo = (userId) => {
     return this.angularFireDatabase.object(`users/${userId}`).valueChanges();
+  }
+
+  addNetwork = (network) => {
+    return this.angularFireDatabase.database.ref(`users/${this.currentUser.getId()}/myNetworks`).push(network);
   }
 }

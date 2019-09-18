@@ -51,10 +51,12 @@ export class AuthService {
         snapshot = data;
         let user = new User(
           snapshot.id,
+          snapshot.photo,
           snapshot.firstName, 
           snapshot.lastName, 
           snapshot.email,
-          "secretPassword"
+          "secretPassword",
+          []
         )
         this.userService.currentUser = user;
         this.router.navigate([url]);
@@ -67,6 +69,6 @@ export class AuthService {
   logoff = () => {
     this.angularFireAuth.auth.signOut();
     localStorage.removeItem("tccJayneUser");
-    this.router.navigateByUrl('');
+    this.router.navigate(['']);
   }
 }

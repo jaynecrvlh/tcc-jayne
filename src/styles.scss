@@ -38,13 +38,19 @@
   z-index: 1;
 }
 
-.ant-calendar-picker-input.ant-input, .ant-calendar-input-wrap {
-  display: none;
+.home {
+  .ant-calendar-picker-input.ant-input, .ant-calendar-input-wrap {
+    display: none;
+  }
 }
-.cdk-overlay-pane {
+.routine-date-picker {
   margin-top: -14px;
-  left: auto !important;
-  right: 0 !important;
+  width: 100vw;
+  display: flex;
+  justify-content: flex-end;
+}
+.register-network-date-picker {
+  width: calc(100vw - 60px);
 }
 
 .ant-badge .ant-scroll-number-custom-component {
@@ -54,4 +60,12 @@
 
 .ant-tag {
   margin: 0;
+}
+
+.ant-radio-group {
+  width: 100%;
+}
+.ant-radio-group-large .ant-radio-button-wrapper {
+  width: 50%;
+  text-align: center;
 }

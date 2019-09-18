@@ -65,7 +65,21 @@
         }
       }
 
-      &__without-network {
+      &__list-of-networks {
+        margin-bottom: 30px;
+        
+        &__label {
+          margin-bottom: 10px;
+          font-size: 16px;
+          font-weight: bold;
+        }
+
+        &__description {
+          margin-top: -6px;
+        }
+      }
+
+      &__actions {
         button:first-child {
           margin-bottom: 10px;
         }

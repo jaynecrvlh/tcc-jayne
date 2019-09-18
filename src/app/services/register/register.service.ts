@@ -15,7 +15,7 @@ export class RegisterService {
   user: User;
 
   constructor(private http:HttpClient, private angularFireDatabase:AngularFireDatabase, private angularFireAuth:AngularFireAuth, private authService:AuthService, private router:Router, private message:NzMessageService) {
-    this.user = new User('id', '', '', '', '');
+    this.user = new User('id', '', '', '', '', '', []);
   }
 
   registerUser = () => {
@@ -31,6 +31,7 @@ export class RegisterService {
   registerUserData = (id, password) => {
     const user = {
       id: id,
+      photo: this.user.getPhoto(),
       firstName: this.user.getFirstName(),
       lastName: this.user.getLastName(),
       email: this.user.getEmail()

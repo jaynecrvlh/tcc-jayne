@@ -1,14 +1,24 @@
 export class User {
   constructor(
     private id:string,
+    private photo:string,
     private firstName:string,
     private lastName:string,
     private email:string,
-    private password:string
+    private password:string,
+    private myNetworks:Array<Object>
   ) {}
   
   getId():string {
     return this.id;
+  }
+
+  getPhoto():string {
+    return this.photo;
+  }
+
+  setPhoto(photo:string):void {
+    this.photo = photo;
   }
 
   getFirstName():string {
@@ -41,5 +51,13 @@ export class User {
 
   setPassword(password:string):void {
     this.password = password;
+  }
+
+  getMyNetworks():Array<Object> {
+    return this.myNetworks;
+  }
+
+  setMyNetworks(myNetworks:Array<Object>):void {
+    this.myNetworks = myNetworks;
   }
 }
