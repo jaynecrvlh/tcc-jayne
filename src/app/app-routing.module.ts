@@ -6,6 +6,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { TaskComponent } from './pages/task/task.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { RegisterNetworkComponent } from './pages/register-network/register-network.component';
+import { NetworkComponent } from './pages/network/network.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: 'register-network',
     component: RegisterNetworkComponent
+  },
+  {
+    path: 'network/:id',
+    component: NetworkComponent
   }
 ];
 

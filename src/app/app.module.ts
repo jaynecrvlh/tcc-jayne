@@ -20,6 +20,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { TaskComponent } from './pages/task/task.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { RegisterNetworkComponent } from './pages/register-network/register-network.component';
+import { NetworkComponent } from './pages/network/network.component';
 
 registerLocaleData(pt);
 
@@ -31,7 +32,8 @@ registerLocaleData(pt);
     HomeComponent,
     TaskComponent,
     SignUpComponent,
-    RegisterNetworkComponent
+    RegisterNetworkComponent,
+    NetworkComponent
   ],
   imports: [
     BrowserModule,

@@ -140,7 +140,6 @@ export class HomeComponent implements OnInit {
         this.ngZone.run(() => {
           const networks = Object.entries(snapshot.val()).map(e => Object.assign(e[1], { key: e[0] }));
           this.myNetworks = networks;
-          console.log(this.myNetworks);
           this.loadingNetworks = false;
         });
       }
@@ -171,7 +170,6 @@ export class HomeComponent implements OnInit {
   }
 
   handleCancel(): void {
-    console.log('Button cancel clicked!');
     this.codeModal = false;
   }
 

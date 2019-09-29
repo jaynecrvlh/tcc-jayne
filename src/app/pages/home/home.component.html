@@ -70,18 +70,17 @@
         </div>
         <div class="home__profile__container__list-of-networks">
           <div class="home__profile__container__list-of-networks__label">Minhas redes de cuidados:</div>
-          <nz-list [nzDataSource]="myNetworks" [nzRenderItem]="network" [nzItemLayout]="'horizontal'" [nzLoading]="loadingNetworks">
+          <nz-list [nzDataSource]="myNetworks" [nzRenderItem]="network" [nzItemLayout]="'horizontal'" [nzLoading]="loadingNetworks" nzBordered>
             <ng-template #network let-item>
               <nz-list-item>
-                <nz-list-item-meta [nzTitle]="networkTitle" [nzAvatar]="networkAvatar" [nzDescription]="networkMembers">
+                <nz-list-item-meta [nzTitle]="networkTitle" [nzAvatar]="networkAvatar">
                   <ng-template #networkTitle>
-                    <a href="">{{ item.name }}</a>
+                    <a class="home__profile__container__list-of-networks__network-name" [routerLink]="['/network', item.id]">
+                      {{ item.name }}
+                    </a>
                   </ng-template>
                   <ng-template #networkAvatar>
                     <nz-avatar nzSize="large" nzIcon="team" [nzSrc]="item.avatar"></nz-avatar>
-                  </ng-template>
-                  <ng-template #networkMembers>
-                    <div class="home__profile__container__list-of-networks__description" >{{ item.qtdMembers }} membros</div>
                   </ng-template>
                 </nz-list-item-meta>
               </nz-list-item>

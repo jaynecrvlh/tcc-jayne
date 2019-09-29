@@ -345,4 +345,8 @@ export class RegisterNetworkComponent implements OnInit {
         break;
     }
   }
+
+  teste(){
+    console.log(this.dateOfBirth);
+  }
 }

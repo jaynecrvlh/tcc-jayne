@@ -24,8 +24,13 @@ export class NetworkService {
     this.network.setAdmId(admId);
     this.network.setMembersId([admId]);
     this.router.navigate(['home']);
-    this.userService.addNetwork({id: this.network.getId(), avatar: this.network.getAvatar(), name: this.network.getName(), qtdMembers: this.network.getMembersId().length});
+    this.userService.addNetwork({id: this.network.getId(), avatar: this.network.getAvatar(), name: this.network.getName()});
+    console.log(this.network);
     return this.angularFireDatabase.database.ref("networks").child(id).set(this.network);
+  }
+
+  getNetwork = (networkId) => {
+    return this.angularFireDatabase.object(`networks/${networkId}`).valueChanges();
   }
 
   getUserNetworks = (userId) => {
@@ -34,13 +39,13 @@ export class NetworkService {
 
   signNetwork = async (userId, networkId) => {
     let networkName = "";
-    let networkMembers = 0;
+    let networkAvatar = "";
     await this.angularFireDatabase.database.ref(`networks/${networkId}`).once('value')
     .then(snapshot => {
       networkName = snapshot.val().name;
-      networkMembers = snapshot.val().membersId.length;
+      networkAvatar = snapshot.val().avatar;
     }).catch(error => error);
-    await this.userService.addNetwork({id: networkId, name: networkName, qtdMembers: networkMembers});
+    await this.userService.addNetwork({id: networkId, avatar: networkAvatar, name: networkName});
     return this.angularFireDatabase.database.ref("networks").child(networkId).child("membersId").push(userId);
   }
 

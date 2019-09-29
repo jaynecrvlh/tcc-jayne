@@ -26,7 +26,11 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-date-picker nzClassName="register-network-date-picker" formControlName="dateOfBirth" nzPlaceHolder="Data de nascimento" [(ngModel)]="dateOfBirth"></nz-date-picker>
+        <nz-form-control nzErrorTip="Informe a data de nascimento do idoso(a)">
+          <nz-input-group nzPrefixIcon="calendar">
+            <input type="text" nz-input formControlName="dateOfBirth" placeholder="Data de nascimento" [(ngModel)]="dateOfBirth" nzRequired/>
+          </nz-input-group>
+        </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzFor="genre">Sexo:</nz-form-label>
