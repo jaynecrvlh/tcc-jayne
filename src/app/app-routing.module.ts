@@ -7,6 +7,7 @@ import { TaskComponent } from './pages/task/task.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { RegisterNetworkComponent } from './pages/register-network/register-network.component';
 import { NetworkComponent } from './pages/network/network.component';
+import { RegisterTaskComponent } from './pages/register-task/register-task.component';
 
 const routes: Routes = [
   {
@@ -14,7 +15,7 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'home',
+    path: 'home/:tab',
     component: HomeComponent
   },
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
   {
     path: 'network/:id',
     component: NetworkComponent
+  },
+  {
+    path: 'register-task',
+    component: RegisterTaskComponent
   }
 ];
 

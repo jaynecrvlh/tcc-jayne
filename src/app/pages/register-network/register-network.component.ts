@@ -294,14 +294,16 @@ export class RegisterNetworkComponent implements OnInit {
       this.validateForm.controls[i].updateValueAndValidity();
     }
 
-    this.networkService.network.setAvatar(this.avatarUrl);
-    this.networkService.network.setName(this.name);
-    this.networkService.network.setDateOfBirth(this.dateOfBirth);
-    this.networkService.network.setGenre(this.genre);
-    this.networkService.network.setBloodType(this.bloodType);
-    this.networkService.network.setSpecialNeeds(this.specialNeeds);
-    this.networkService.network.setInterests(this.interests);
-    this.networkService.registerNetwork();
+    if(this.validateForm.valid) {
+      this.networkService.network.setAvatar(this.avatarUrl);
+      this.networkService.network.setName(this.name);
+      this.networkService.network.setDateOfBirth(this.dateOfBirth);
+      this.networkService.network.setGenre(this.genre);
+      this.networkService.network.setBloodType(this.bloodType);
+      this.networkService.network.setSpecialNeeds(this.specialNeeds);
+      this.networkService.network.setInterests(this.interests);
+      this.networkService.registerNetwork();
+    }
   }
 
   constructor(private router: Router, private fb: FormBuilder, private networkService: NetworkService, private msg: NzMessageService) { }
@@ -318,7 +320,7 @@ export class RegisterNetworkComponent implements OnInit {
   }
 
   onBack() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/home', 'profile']);
   }
 
   private getBase64(img: File, callback: (img: string) => void): void {
@@ -344,9 +346,5 @@ export class RegisterNetworkComponent implements OnInit {
         this.loadingPhoto = false;
         break;
     }
-  }
-
-  teste(){
-    console.log(this.dateOfBirth);
   }
 }

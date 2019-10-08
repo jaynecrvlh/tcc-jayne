@@ -1,0 +1,67 @@
+<article class="register-task">
+  <nz-page-header (nzBack)="onBack()" nzBackIcon nzTitle="Criar uma nova tarefa"></nz-page-header>
+  <section class="register-task__content">
+    <form class="register-task__content__form" nz-form [formGroup]="validateForm" (ngSubmit)="onRegisterTask()">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Selecione uma categoria!">
+          <nz-select formControlName="category" style="width: 100%;" nzPlaceHolder="Categoria da atividade" [(ngModel)]="category" nzSize="large">
+            <nz-option *ngFor="let option of listOfCategories" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item *ngIf="category != undefined && category == 'Medicações'">
+        <nz-form-control nzErrorTip="Informe o nome da medicação">
+          <nz-input-group>
+            <input type="text" nz-input formControlName="name" placeholder="Nome da medicação" [(ngModel)]="name" nzRequired/>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item *ngIf="category != undefined && category != 'Medicações'">
+        <nz-form-control nzErrorTip="Selecione a tarefa!">
+          <nz-select formControlName="name" style="width: 100%;" nzPlaceHolder="Atividade" [(ngModel)]="name" nzSize="large">
+            <ng-template
+              ngFor let-option
+              [ngForOf]="
+                category == 'Compromissos' ? appointmentsTasks :
+                category == 'Lazer/recreativas' ? recreationTasks :
+                category == 'Atividades físicas' ? physicalActivitiesTasks :
+                category == 'Rotina' ? routineTasks : mealsTasks">
+              <nz-option [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+            </ng-template>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Informe a data que a atividade deve ser realizada">
+          <nz-input-group nzPrefixIcon="calendar">
+            <input type="text" nz-input formControlName="date" placeholder="Data" [(ngModel)]="date" nzRequired/>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Informe a hora que a atividade deve ser realizada">
+          <nz-input-group nzPrefixIcon="clock-circle">
+            <input type="text" nz-input formControlName="time" placeholder="Hora" [(ngModel)]="time" nzRequired/>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Escreva algo na descrição da tarefa">
+          <textarea formControlName="description" nz-input rows="4" placeholder="Descrição" [(ngModel)]="description"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Selecione o responsável pela tarefa!">
+          <nz-select formControlName="responsible" style="width: 100%;" nzPlaceHolder="Responsável" [(ngModel)]="responsible" nzSize="large">
+            <nz-option *ngFor="let option of listOfMembers" [nzLabel]="option.firstName + ' ' + option.lastName" [nzValue]="{id: option.id, firstName: option.firstName, lastName: option.lastName, photo: option.photo}"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <button nz-button class="register-task__content__form__button" [nzType]="'primary'" nzSize="large" nzBlock>Criar atividade</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </section>
+</article>

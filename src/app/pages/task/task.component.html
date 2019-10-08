@@ -1,35 +1,35 @@
 <article class="task">
   <nz-page-header (nzBack)="onBack()" nzBackIcon>
-    <nz-page-header-title>{{title}}</nz-page-header-title>
+    <nz-page-header-title>{{task == undefined ? "carregando..." : task.name}}</nz-page-header-title>
     <nz-page-header-extra>
       <i nz-icon nzType="edit" nzTheme="outline"></i>
     </nz-page-header-extra>
   </nz-page-header>
-  <section class="task__container">
+  <section *ngIf="task != undefined" class="task__container">
     <div class="task__container__info">
       <div class="task__container__info__description">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ac ultricies nulla, sit amet rutrum lorem. Vivamus leo libero, tempus nec tortor aliquam, viverra fermentum massa.</p>
+        <p>{{task.description}}</p>
       </div>
       <div class="task__container__info__date-and-tag">
-        <p>06 de setembro de 2019</p>
-        <nz-tag [nzColor]="'green'">Exercício</nz-tag>
+        <p>{{task.date}}</p>
+        <nz-tag [nzColor]="'green'">{{task.category}}</nz-tag>
       </div>
       <div class="task__container__info__responsible-and-hour">
         <div class="task__container__info__responsible-and-hour__responsible">
-          <nz-avatar nzSize="large" nzIcon="user" nzSrc="http://rumconnection.com/wp-content/bpds_custom/914-Picture_153.png"></nz-avatar>
-          <span>Daniel</span>
+          <nz-avatar nzSize="large" nzIcon="user" [nzSrc]="task.responsible.photo"></nz-avatar>
+          <span>{{task.responsible.firstName}} {{task.responsible.lastName}}</span>
         </div>
-        <div class="task__container__info__responsible-and-hour__hour">14:00</div>
+        <div class="task__container__info__responsible-and-hour__hour">{{task.time}}</div>
       </div>
     </div>
     <div class="task__container__comments">
       <nz-divider nzText="Comentários" nzOrientation="left"></nz-divider>
-      <nz-list [nzDataSource]="data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" [nzNoResult]="noComments">
+      <nz-list [nzDataSource]="comments" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" [nzNoResult]="noComments">
         <ng-template #item let-item>
-          <nz-comment [nzAuthor]="item.author" [nzDatetime]="item.displayTime">
-            <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="item.avatar"></nz-avatar>
+          <nz-comment [nzAuthor]="item.author" [nzDatetime]="item.date">
+            <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="item.photo"></nz-avatar>
             <nz-comment-content>
-              <p>{{ item.content }}</p>
+              <p>{{ item.message }}</p>
             </nz-comment-content>
           </nz-comment>
         </ng-template>
@@ -38,20 +38,23 @@
         </ng-template>
       </nz-list>
       <nz-comment>
-        <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="user.avatar"></nz-avatar>
+        <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="currentUser.photo"></nz-avatar>
         <nz-comment-content>
           <nz-form-item>
             <textarea [(ngModel)]="inputValue" nz-input rows="4"></textarea>
           </nz-form-item>
           <nz-form-item style="text-align: right;">
-            <button nz-button nzType="primary" [nzLoading]="submitting" [disabled]="!inputValue" (click)="handleSubmit()">
+            <button nz-button nzType="primary" [nzLoading]="submitting" [disabled]="!inputValue" (click)="comment()">
               Comentar
             </button>
           </nz-form-item>
         </nz-comment-content>
       </nz-comment>
-      <button nz-button nzType="primary" nzSize="large" nzBlock (click)="showConfirm()">
-        <i nz-icon nzType="check"></i>Atividade realizada
+      <button *ngIf="!task.done" nz-button nzType="primary" nzSize="large" nzBlock (click)="setTaskDone(true)">
+        <i nz-icon nzType="check"></i>Marcar como realizada
+      </button>
+      <button *ngIf="task.done" nz-button nzType="danger" nzSize="large" nzBlock (click)="setTaskDone(false)">
+        <i nz-icon nzType="close"></i>Marcar como não realizada
       </button>
     </div>
   </section>

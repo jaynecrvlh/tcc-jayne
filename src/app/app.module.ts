@@ -21,6 +21,7 @@ import { TaskComponent } from './pages/task/task.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { RegisterNetworkComponent } from './pages/register-network/register-network.component';
 import { NetworkComponent } from './pages/network/network.component';
+import { RegisterTaskComponent } from './pages/register-task/register-task.component';
 
 registerLocaleData(pt);
 
@@ -33,7 +34,8 @@ registerLocaleData(pt);
     TaskComponent,
     SignUpComponent,
     RegisterNetworkComponent,
-    NetworkComponent
+    NetworkComponent,
+    RegisterTaskComponent
   ],
   imports: [
     BrowserModule,

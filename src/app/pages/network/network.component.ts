@@ -19,7 +19,7 @@ export class NetworkComponent implements OnInit {
   }
 
   onBack() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/home', 'profile']);
   }
 
   getNetwork = () => {
@@ -39,7 +39,8 @@ export class NetworkComponent implements OnInit {
           snapshot.specialNeeds,
           snapshot.interests,
           snapshot.admId,
-          snapshot.membersId
+          snapshot.membersId,
+          []
         )
       },
       error => console.log(error)

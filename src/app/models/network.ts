@@ -11,7 +11,8 @@ export class Network {
     private specialNeeds:Array<string>,
     private interests:Array<string>,
     private admId:string,
-    private membersId:Array<string>
+    private membersId:Array<string>,
+    private tasks:Array<Object>
   ) {}
   
   getId():string {
@@ -92,5 +93,13 @@ export class Network {
 
   setMembersId(membersId:Array<string>):void {
     this.membersId = membersId;
+  }
+
+  getTasks():Array<Object> {
+    return this.tasks;
+  }
+
+  setTasks(tasks:Array<Object>):void {
+    this.tasks = tasks;
   }
 }

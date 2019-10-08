@@ -1,27 +1,37 @@
 <article class="home">
-  <nz-tabset nzTabPosition="bottom" nzSize="large" [nzSelectedIndex]="1">
+  <nz-tabset nzTabPosition="bottom" nzSize="large" [nzSelectedIndex]="tabSelected">
 
     <nz-tab [nzTitle]="routineTemplate">
       <ng-template #routineTemplate><i nz-icon nzType="schedule"></i>Rotina</ng-template>
       <nz-page-header>
         <nz-page-header-title>Rotina</nz-page-header-title>
-        <nz-page-header-subtitle>Sexta, 06 de setembro</nz-page-header-subtitle>
+        <nz-page-header-subtitle>{{dayOfTheWeek}}, {{day}} de {{month}}</nz-page-header-subtitle>
         <nz-page-header-extra>
           <i nz-icon nzType="calendar" nzTheme="outline" (click)="toggleDatePicker()"></i>
+          <span nz-dropdown nzTrigger="click" [nzDropdownMenu]="networks">
+            <nz-avatar style="margin-left: 20px" nzSize="small" nzIcon="team" [nzSrc]="currentNetwork.avatar"></nz-avatar>
+          </span>
+          <nz-dropdown-menu #networks="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item nzDisabled>Mudar rede</li>
+              <li nz-menu-divider></li>
+              <li *ngFor="let item of myNetworks" nz-menu-item (click)="switchNetwork(item.id)">{{item.name}}</li>
+            </ul>
+          </nz-dropdown-menu>
         </nz-page-header-extra>
       </nz-page-header>
-      <nz-date-picker nzDropdownClassName="routine-date-picker" [nzOpen]="openDatePicker" [(ngModel)]="date" (ngModelChange)="onChangeDate($event)"></nz-date-picker>
+      <nz-date-picker nzDropdownClassName="routine-date-picker" [nzOpen]="openDatePicker" [(ngModel)]="date" (ngModelChange)="getTasks($event)"></nz-date-picker>
       <section class="home__routine__list">
-        <nz-list [nzDataSource]="data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" [nzNoResult]="noTasks">
+        <nz-list [nzDataSource]="tasks" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" [nzNoResult]="noTasks">
           <ng-template #item let-item>
             <nz-list-item [nzExtra]="taskTag" class="home__routine__list__item" [ngClass]="{'task-done': item.done}" [routerLink]="['/task', item.id]">
-              <nz-list-item-meta [nzTitle]="taskTitle" [nzAvatar]="taskAvatar" [nzDescription]="'Responsável: ' + item.responsible.name">
+              <nz-list-item-meta [nzTitle]="taskTitle" [nzAvatar]="taskAvatar" [nzDescription]="'Responsável: ' + item.responsible.firstName">
                 <ng-template #taskTitle>
-                  <a href="">{{ item.title }}</a>
+                  <a>{{ item.name }}</a>
                 </ng-template>
                 <ng-template #taskAvatar>
                   <nz-badge [nzCount]="item.done ? checked : 0">
-                    <nz-avatar [nzSize]="64" nzIcon="user" [nzSrc]="item.responsible.avatar"></nz-avatar>
+                    <nz-avatar [nzSize]="64" nzIcon="user" [nzSrc]="item.responsible.photo"></nz-avatar>
                   </nz-badge>
                   <ng-template #checked>
                     <i nz-icon nzType="check-circle" nzTheme="fill" class="ant-scroll-number-custom-component" style="color: #00AA00; font-size: 20px;"></i>
@@ -30,8 +40,8 @@
               </nz-list-item-meta>
               <ng-template #taskTag>
                 <div class="home__routine__list__item__hour-container">
-                  <nz-tag [nzColor]="item.category.color">{{item.category.name}}</nz-tag>
-                  <div class="home__routine__list__item__hour-container__hour">{{item.hour}}</div>
+                  <nz-tag [nzColor]="item.category.color">{{item.category}}</nz-tag>
+                  <div class="home__routine__list__item__hour-container__hour">{{item.time}}</div>
                 </div>
               </ng-template>
             </nz-list-item>
@@ -41,7 +51,7 @@
           </ng-template>
         </nz-list>
       </section>
-      <button class="home__routine__add-btn" nz-button nzType="primary" nzSize="large" nzShape="circle"><i nz-icon nzType="plus"></i></button>
+      <button class="home__routine__add-btn" nz-button nzType="primary" nzSize="large" nzShape="circle" [routerLink]="['/register-task']"><i nz-icon nzType="plus"></i></button>
     </nz-tab>
 
     <nz-tab [nzTitle]="profileTemplate">

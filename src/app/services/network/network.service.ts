@@ -13,11 +13,10 @@ export class NetworkService {
   network: Network;
 
   constructor(private angularFireDatabase:AngularFireDatabase, private userService:UserService, private router:Router, private message:NzMessageService) {
-    this.network = new Network('id', '', '', '', '', '', [], [], '', []);
+    this.network = new Network('id', '', '', '', '', '', [], [], '', [], []);
   }
 
   registerNetwork = () => {
-    this.message.success('Rede criada com sucesso!');
     const id = this.angularFireDatabase.database.ref().push().key;
     const admId = this.userService.currentUser.getId();
     this.network.setId(id);
@@ -25,7 +24,8 @@ export class NetworkService {
     this.network.setMembersId([admId]);
     this.router.navigate(['home']);
     this.userService.addNetwork({id: this.network.getId(), avatar: this.network.getAvatar(), name: this.network.getName()});
-    console.log(this.network);
+    this.message.success('Rede criada com sucesso!');
+    localStorage.setItem("tccJayneNetwork", JSON.stringify(this.network));
     return this.angularFireDatabase.database.ref("networks").child(id).set(this.network);
   }
 
@@ -44,12 +44,21 @@ export class NetworkService {
     .then(snapshot => {
       networkName = snapshot.val().name;
       networkAvatar = snapshot.val().avatar;
+      this.changeNetwork(networkId);
     }).catch(error => error);
     await this.userService.addNetwork({id: networkId, avatar: networkAvatar, name: networkName});
     return this.angularFireDatabase.database.ref("networks").child(networkId).child("membersId").push(userId);
   }
 
-  getUserNetworksMembers = (userId) => {
-    return this.angularFireDatabase.database.ref("networks").orderByChild("admId").equalTo(userId);
+  changeNetwork = (networkId) => {
+    this.angularFireDatabase.database.ref(`networks/${networkId}`).once('value')
+    .then(snapshot => {
+      localStorage.setItem("tccJayneNetwork", JSON.stringify(snapshot.val()));
+    }).catch(error => error);
+  }
+
+  getCurrentNetworkMembers = () => {
+    let currentNetwork = JSON.parse(localStorage.getItem("tccJayneNetwork"));
+    return this.angularFireDatabase.database.ref(`networks/${currentNetwork.id}`);
   }
 }

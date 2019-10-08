@@ -3,7 +3,8 @@ import { User } from 'src/app/models/user';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserService } from '../../services/user/user.service';
 import { NetworkService } from '../../services/network/network.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { TaskService } from 'src/app/services/task/task.service';
 
 @Component({
   selector: 'app-home',
@@ -17,120 +18,50 @@ export class HomeComponent implements OnInit {
   openDatePicker = false;
   loadingNetworks = true;
   myNetworks = [];
-  data = [
-    {
-      id: 1,
-      title: 'Hidroginástica',
-      done: true,
-      hour: '14:00',
-      category: {
-        name: 'Exercício',
-        color: 'green'
-      },
-      responsible: {
-        name: 'Daniel',
-        avatar: 'http://rumconnection.com/wp-content/bpds_custom/914-Picture_153.png'
-      }
-    },
-    {
-      id: 2,
-      title: 'Banho',
-      done: true,
-      hour: '15:10',
-      category: {
-        name: 'Higiene',
-        color: 'magenta'
-      },
-      responsible: {
-        name: 'Daniel',
-        avatar: 'http://rumconnection.com/wp-content/bpds_custom/914-Picture_153.png'
-      }
-    },
-    {
-      id: 3,
-      title: 'Lanche',
-      done: true,
-      hour: '15:30',
-      category: {
-        name: 'Refeição',
-        color: 'gold'
-      },
-      responsible: {
-        name: 'Maria',
-        avatar: 'https://www.msudenver.edu/media/content/marketingandcommunications/images/Nguyen,-Mai-Linh_7944_160330-8x5.5cc.jpg'
-      }
-    },
-    {
-      id: 4,
-      title: 'Dormir',
-      done: true,
-      hour: '16:00',
-      category: {
-        name: 'Repouso',
-        color: 'geekblue'
-      },
-      responsible: {
-        name: 'Maria',
-        avatar: 'https://www.msudenver.edu/media/content/marketingandcommunications/images/Nguyen,-Mai-Linh_7944_160330-8x5.5cc.jpg'
-      }
-    },
-    {
-      id: 5,
-      title: 'Televisão',
-      done: false,
-      hour: '18:00',
-      category: {
-        name: 'Lazer',
-        color: 'purple'
-      },
-      responsible: {
-        name: 'Joana',
-        avatar: 'https://cf.dropboxstatic.com/static/images/jobs/jobs_2015/profile-people-ops-liz-vflEQeQ3b.jpg'
-      }
-    },
-    {
-      id: 6,
-      title: 'Jantar',
-      done: true,
-      hour: '20:00',
-      category: {
-        name: 'Refeição',
-        color: 'gold'
-      },
-      responsible: {
-        name: 'Joana',
-        avatar: 'https://cf.dropboxstatic.com/static/images/jobs/jobs_2015/profile-people-ops-liz-vflEQeQ3b.jpg'
-      }
-    },
-    {
-      id: 7,
-      title: 'Dormir',
-      done: false,
-      hour: '21:00',
-      category: {
-        name: 'Repouso',
-        color: 'geekblue'
-      },
-      responsible: {
-        name: 'Daniel',
-        avatar: 'http://rumconnection.com/wp-content/bpds_custom/914-Picture_153.png'
-      }
-    }
-  ];
+  tasks = [];
   codeModal = false;
   networkCode:string;
+  tabSelected = null;
 
-  constructor(private authService: AuthService, private userService: UserService, private networkService: NetworkService, private router: Router, private ngZone: NgZone) { }
+  currentNetwork = JSON.parse(localStorage.getItem('tccJayneNetwork'));
+  currentUser = JSON.parse(localStorage.getItem('tccJayneUser'));
+
+  months = [
+    'janeiro',
+    'fevereiro',
+    'março',
+    'abril',
+    'maio',
+    'junho',
+    'julho',
+    'agosto',
+    'setembro',
+    'outubro',
+    'novembro',
+    'dezembro'
+  ];
+
+  day: string;
+  month: string;
+  year: string;
+  dayOfTheWeek: string;
+
+  constructor(private authService: AuthService, private userService: UserService, private networkService: NetworkService, private taskService: TaskService, private router: Router, private activatedRoute:ActivatedRoute, private ngZone: NgZone) { }
 
   ngOnInit() {
-    let userSaved = JSON.parse(localStorage.getItem('tccJayneUser'));
+    if(this.activatedRoute.snapshot.params.tab === 'routine') {
+      this.tabSelected = 0;
+    }
+    else {
+      this.tabSelected = 1;
+    }
     this.user = new User(
-      userSaved.id,
-      userSaved.photo,
-      userSaved.firstName,
-      userSaved.lastName,
-      userSaved.email,
-      userSaved.password,
+      this.currentUser.id,
+      this.currentUser.photo,
+      this.currentUser.firstName,
+      this.currentUser.lastName,
+      this.currentUser.email,
+      this.currentUser.password,
       []
     );
     this.userService.currentUser = this.user;
@@ -147,10 +78,136 @@ export class HomeComponent implements OnInit {
         this.loadingNetworks = false;
       }
     });
+
+    let today = new Date();
+    this.day = String(today.getDate()).padStart(2, '0');
+    this.month = this.transformMonth(today.getMonth());
+    this.year = String(today.getFullYear());
+    this.dayOfTheWeek = this.transformDayOfTheWeek(today.getDay());
+    this.getTasks(today);
   }
 
-  onChangeDate(result: Date): void {
-    console.log('onChange: ', result);
+  getTasks(result: Date): void {
+    this.fixDate(result.toString());
+    let monthPath;
+    if(this.months.indexOf(this.month) + 1 < 10) {
+      monthPath = '0' + (this.months.indexOf(this.month) + 1);
+    }
+    else {
+      monthPath = this.months.indexOf(this.month) + 1;
+    }
+    this.taskService.getTasksByDay(this.day + monthPath + this.year)
+    .on("value", snapshot => {
+      if(snapshot.val() !== undefined && snapshot.val() !== null) {
+        this.ngZone.run(() => {
+          const tasks = Object.entries(snapshot.val()).map(e => Object.assign(e[1], { key: e[0] }));
+          this.tasks = tasks;
+        });
+      }
+      else {
+        this.ngZone.run(() => {
+          this.tasks = [];
+        });
+      }
+    });
+    this.openDatePicker = false;
+  }
+
+  fixDate(date:string) {
+    this.dayOfTheWeek = this.transformDayOfTheWeek(date.substring(3, 0));
+    this.month = this.transformMonth(date.substring(4, 7));
+    this.day = date.substring(8, 10);
+    this.year = date.substring(11, 15);
+  }
+
+  transformMonth(month) {
+    let index;
+    if(typeof(month) == "string") {
+      switch (month) {
+        case 'Jan':
+          index = 0;
+          break;
+        case 'Feb':
+          index = 1;
+          break;
+        case 'Mar':
+          index = 2;
+          break;
+        case 'Apr':
+          index = 3;
+          break;
+        case 'May':
+          index = 4;
+          break;
+        case 'Jun':
+          index = 5;
+          break;
+        case 'Jul':
+          index = 6;
+          break;
+        case 'Aug':
+          index = 7;
+          break;
+        case 'Sep':
+          index = 8;
+          break;
+        case 'Oct':
+          index = 9;
+          break;
+        case 'Nov':
+          index = 10;
+          break;
+        case 'Dec':
+          index = 11;
+          break;
+      }
+    }
+    else {
+      index = month;
+    }
+    return this.months[index];
+  }
+
+  transformDayOfTheWeek(dayOfTheWeek) {
+    let index;
+    let daysOfTheWeek = [
+      'Domingo',
+      'Segunda',
+      'Terça',
+      'Quarta',
+      'Quinta',
+      'Sexta',
+      'Sábado'
+    ];
+    if(typeof(dayOfTheWeek) == "string") {
+      switch (dayOfTheWeek) {
+        case 'Sun':
+          index = 0;
+          break;
+        case 'Mon':
+          index = 1;
+          break;
+        case 'Tue':
+          index = 2;
+          break;
+        case 'Wed':
+          index = 3;
+          break;
+        case 'Thu':
+          index = 4;
+          break;
+        case 'Fri':
+          index = 5;
+          break;
+        case 'Sat':
+          index = 6;
+          break;
+      }
+    }
+    else {
+      index = dayOfTheWeek;
+    }
+    return daysOfTheWeek[index];
   }
 
   toggleDatePicker() {
@@ -175,5 +232,12 @@ export class HomeComponent implements OnInit {
 
   onLogout() {
     this.authService.logoff();
+  }
+
+  switchNetwork (networkId) {
+    this.networkService.changeNetwork(networkId);
+    setTimeout(() => {
+      this.currentNetwork = JSON.parse(localStorage.getItem('tccJayneNetwork'));
+    }, 1000);
   }
 }

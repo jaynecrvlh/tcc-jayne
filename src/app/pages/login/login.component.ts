@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     this.userLogged = user != null ? true : false;
     this.verified = true;
     if(this.verified && this.userLogged) {
-      this.router.navigate(['home']);
+      this.router.navigate(['home', 'profile']);
     }
 
     this.validateForm = this.fb.group({
