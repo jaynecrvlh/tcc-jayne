@@ -13,7 +13,7 @@ export class TaskService {
   task:Task;
 
   constructor(private angularFireDatabase:AngularFireDatabase, private router:Router, private message:NzMessageService, private networkService: NetworkService) {
-    this.task = new Task("", "", "", "", "", "", {}, false, []);
+    this.task = new Task("", "", "", "", "", "", {id:"", firstName:"", lastName:"", photo:""}, false, []);
   }
 
   registerTask = () => {

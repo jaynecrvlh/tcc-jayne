@@ -73,10 +73,10 @@
       <section class="home__profile__container">
         <div class="home__profile__container__user">
           <div class="home__profile__container__user__avatar">
-            <nz-avatar [nzSrc]="user.photo" [nzSize]="84" nzIcon="user"></nz-avatar>
+            <nz-avatar [nzSrc]="user.getPhoto()" [nzSize]="84" nzIcon="user"></nz-avatar>
           </div>
-          <div class="home__profile__container__user__name">{{user.firstName}} {{user.lastName}}</div>
-          <div class="home__profile__container__user__email">{{user.email}}</div>
+          <div class="home__profile__container__user__name">{{user.getFirstName()}} {{user.getLastName()}}</div>
+          <div class="home__profile__container__user__email">{{user.getEmail()}}</div>
         </div>
         <div class="home__profile__container__list-of-networks">
           <div class="home__profile__container__list-of-networks__label">Minhas redes de cuidados:</div>

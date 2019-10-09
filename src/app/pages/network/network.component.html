@@ -1,17 +1,17 @@
 <article class="network">
   <nz-page-header (nzBack)="onBack()" nzBackIcon>
-    <nz-page-header-title>{{network == undefined ? "carregando..." : network.name}}</nz-page-header-title>
+    <nz-page-header-title>{{network == undefined ? "carregando..." : network.getName()}}</nz-page-header-title>
     <nz-page-header-extra>
       <i nz-icon nzType="more" nzTheme="outline"></i>
     </nz-page-header-extra>
   </nz-page-header>
   <section *ngIf="network != undefined">
-    <nz-avatar nzIcon="team" [nzSrc]="network.avatar"></nz-avatar>
-    Data de nascimento: {{network.dateOfBirth}}<br>
-    Sexo: {{network.genre}}<br>
-    Tipo sanguineo: {{network.bloodType}}<br>
-    Necessidades especiais: {{network.specialNeeds}}<br>
-    Interesses: {{network.interests}}<br>
-    Quantidade de membros: {{network.membersId}}
+    <nz-avatar nzIcon="team" [nzSrc]="network.getAvatar()"></nz-avatar>
+    Data de nascimento: {{network.getDateOfBirth()}}<br>
+    Sexo: {{network.getGenre()}}<br>
+    Tipo sanguineo: {{network.getBloodType()}}<br>
+    Necessidades especiais: {{network.getSpecialNeeds()}}<br>
+    Interesses: {{network.getInterests()}}<br>
+    Quantidade de membros: {{network.getMembersId()}}
   </section>
 </article>

@@ -17,7 +17,12 @@ export class RegisterTaskComponent implements OnInit {
   date:string;
   time:string;
   description:string;
-  responsible:Object;
+  responsible:{
+    id:string,
+    firstName:string,
+    lastName:string,
+    photo:string
+  };
 
   listOfCategories = [
     {

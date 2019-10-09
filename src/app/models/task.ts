@@ -6,9 +6,20 @@ export class Task {
     private date: string,
     private time: string,
     private description: string,
-    private responsible: Object,
+    private responsible: {
+      id:string,
+      firstName:string,
+      lastName:string,
+      photo:string
+    },
     private done: boolean,
-    private comments: Array<Object>
+    private comments: Array<{
+      author:string,
+      photo:string,
+      date:string,
+      hour:string,
+      message:string
+    }>
   ){}
 
   getId():string {
@@ -59,11 +70,11 @@ export class Task {
     this.description = description;
   }
 
-  getResponsible():Object {
+  getResponsible():{id:string, firstName:string, lastName:string, photo:string} {
     return this.responsible;
   }
 
-  setResponsible(responsible:Object):void {
+  setResponsible(responsible:{id:string, firstName:string, lastName:string, photo:string}):void {
     this.responsible = responsible;
   }
 
@@ -75,11 +86,11 @@ export class Task {
     this.done = done;
   }
 
-  getComments():Array<Object> {
+  getComments():Array<{author:string, photo:string, date:string, hour:string, message:string}> {
     return this.comments;
   }
 
-  setComments(comments:Array<Object>):void {
+  setComments(comments:Array<{author:string, photo:string, date:string, hour:string, message:string}>):void {
     this.comments = comments;
   }
 }
