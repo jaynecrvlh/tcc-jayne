@@ -3,20 +3,10 @@
   <section class="register-network__content">
     <form class="register-network__content__form" nz-form [formGroup]="validateForm" (ngSubmit)="onRegisterNetwork()">
       <div class="register-network__content__form__upload-photo">
-        <nz-upload
-          class="avatar-uploader"
-          nzAction="https://jsonplaceholder.typicode.com/posts/"
-          nzName="avatar"
-          nzListType="picture-card"
-          [nzShowUploadList]="false"
-          (nzChange)="handleChange($event)"
-        >
-          <ng-container *ngIf="!avatarUrl">
-            <i class="upload-icon" nz-icon [nzType]="loadingPhoto ? 'loading' : 'plus'"></i>
-            <div class="ant-upload-text">Foto</div>
-          </ng-container>
-          <img *ngIf="avatarUrl" [src]="avatarUrl" class="avatar" />
-        </nz-upload>
+        <div class="register-network__content__form__upload-photo__container">
+          <nz-avatar [nzSize]="100" nzIcon="camera" [nzSrc]="avatarUrl"></nz-avatar>
+          <input class="register-network__content__form__upload-photo__container__file-picker" type="file" accept=".png, .jpg, .jpeg" (change)="changeProfilePic($event)">
+        </div>
       </div>
       <nz-form-item>
         <nz-form-control nzErrorTip="Informe o nome do idoso(a)">

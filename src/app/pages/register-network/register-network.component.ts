@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NetworkService } from '../../services/network/network.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { UploadFile } from 'ng-zorro-antd/upload';
 
 @Component({
   selector: 'app-register-network',
@@ -306,7 +304,7 @@ export class RegisterNetworkComponent implements OnInit {
     }
   }
 
-  constructor(private router: Router, private fb: FormBuilder, private networkService: NetworkService, private msg: NzMessageService) { }
+  constructor(private router: Router, private fb: FormBuilder, private networkService: NetworkService) { }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
@@ -323,28 +321,12 @@ export class RegisterNetworkComponent implements OnInit {
     this.router.navigate(['/home', 'profile']);
   }
 
-  private getBase64(img: File, callback: (img: string) => void): void {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result!.toString()));
-    reader.readAsDataURL(img);
-  }
-
-  handleChange(info: { file: UploadFile }): void {
-    switch (info.file.status) {
-      case 'uploading':
-        this.loadingPhoto = true;
-        break;
-      case 'done':
-        // Get this url from response in real world.
-        this.getBase64(info.file!.originFileObj!, (img: string) => {
-          this.loadingPhoto = false;
-          this.avatarUrl = img;
-        });
-        break;
-      case 'error':
-        this.msg.error('Network error');
-        this.loadingPhoto = false;
-        break;
-    }
+  changeProfilePic(event){
+    let profilePic = event.target.files[0];
+    var reader = new FileReader();
+    reader.addEventListener("loadend", () => {
+      this.avatarUrl = String(reader.result);
+    }, false);
+    reader.readAsDataURL(profilePic);
   }
 }

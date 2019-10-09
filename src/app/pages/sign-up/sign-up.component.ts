@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { RegisterService } from 'src/app/services/register/register.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { UploadFile } from 'ng-zorro-antd/upload';
 
 @Component({
   selector: 'app-sign-up',
@@ -46,7 +44,7 @@ export class SignUpComponent implements OnInit {
     return {};
   };
 
-  constructor(private fb: FormBuilder, private registerService:RegisterService, private msg: NzMessageService) { }
+  constructor(private fb: FormBuilder, private registerService:RegisterService) { }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
@@ -58,28 +56,12 @@ export class SignUpComponent implements OnInit {
     });
   }
 
-  private getBase64(img: File, callback: (img: string) => void): void {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result!.toString()));
-    reader.readAsDataURL(img);
-  }
-
-  handleChange(info: { file: UploadFile }): void {
-    switch (info.file.status) {
-      case 'uploading':
-        this.loadingPhoto = true;
-        break;
-      case 'done':
-        // Get this url from response in real world.
-        this.getBase64(info.file!.originFileObj!, (img: string) => {
-          this.loadingPhoto = false;
-          this.avatarUrl = img;
-        });
-        break;
-      case 'error':
-        this.msg.error('Network error');
-        this.loadingPhoto = false;
-        break;
-    }
+  changeProfilePic(event){
+    let profilePic = event.target.files[0];
+    var reader = new FileReader();
+    reader.addEventListener("loadend", () => {
+      this.avatarUrl = String(reader.result);
+    }, false);
+    reader.readAsDataURL(profilePic);
   }
 }

@@ -22,7 +22,7 @@ export class NetworkService {
     this.network.setId(id);
     this.network.setAdmId(admId);
     this.network.setMembersId([admId]);
-    this.router.navigate(['home']);
+    this.router.navigate(['home', 'profile']);
     this.userService.addNetwork({id: this.network.getId(), avatar: this.network.getAvatar(), name: this.network.getName()});
     this.message.success('Rede criada com sucesso!');
     localStorage.setItem("tccJayneNetwork", JSON.stringify(this.network));

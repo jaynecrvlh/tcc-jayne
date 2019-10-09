@@ -19,6 +19,22 @@
         display: flex;
         justify-content: center;
         margin-bottom: 20px;
+
+        &__container {
+          width: 100px;
+          height: 100px;
+          position: relative;
+
+          &__file-picker {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            border-radius: 50%;
+          }
+        }
       }
 
       &__button {

@@ -23,8 +23,8 @@ export class HomeComponent implements OnInit {
   networkCode:string;
   tabSelected = null;
 
-  currentNetwork = JSON.parse(localStorage.getItem('tccJayneNetwork'));
-  currentUser = JSON.parse(localStorage.getItem('tccJayneUser'));
+  currentNetwork = null;
+  currentUser = null;
 
   months = [
     'janeiro',
@@ -55,6 +55,9 @@ export class HomeComponent implements OnInit {
     else {
       this.tabSelected = 1;
     }
+    this.currentNetwork = JSON.parse(localStorage.getItem('tccJayneNetwork'));
+    this.currentUser = JSON.parse(localStorage.getItem('tccJayneUser'));
+
     this.user = new User(
       this.currentUser.id,
       this.currentUser.photo,
@@ -71,6 +74,7 @@ export class HomeComponent implements OnInit {
         this.ngZone.run(() => {
           const networks = Object.entries(snapshot.val()).map(e => Object.assign(e[1], { key: e[0] }));
           this.myNetworks = networks;
+          this.networkService.changeNetwork(this.myNetworks[0].id);
           this.loadingNetworks = false;
         });
       }
@@ -84,7 +88,9 @@ export class HomeComponent implements OnInit {
     this.month = this.transformMonth(today.getMonth());
     this.year = String(today.getFullYear());
     this.dayOfTheWeek = this.transformDayOfTheWeek(today.getDay());
-    this.getTasks(today);
+    if(this.currentNetwork !== null) {
+      this.getTasks(today);
+    }
   }
 
   getTasks(result: Date): void {
@@ -221,7 +227,7 @@ export class HomeComponent implements OnInit {
   handleOk(): void {
     this.networkService.signNetwork(this.user.getId(), this.networkCode)
     .then(() => {
-      this.router.navigate(['home']);
+      this.router.navigate(['home', 'profile']);
     }).catch(error => error);
     this.codeModal = false;
   }

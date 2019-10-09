@@ -19,7 +19,7 @@ export class TaskService {
   registerTask = () => {
     let currentNetwork = JSON.parse(localStorage.getItem("tccJayneNetwork"));
     let path = this.task.getDate().replace(/[^\w\s]/gi, '') + '/' + this.task.getTime().replace(/[^\w\s]/gi, '');
-    this.router.navigate(['home']);
+    this.router.navigate(['home', 'routine']);
     this.message.success('Tarefa criada com sucesso!');
     this.angularFireDatabase.database.ref(`networks/${currentNetwork.id}/tasks`).child(path).set(this.task);
     this.networkService.changeNetwork(currentNetwork.id);

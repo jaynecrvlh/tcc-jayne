@@ -1,4 +1,4 @@
-<article class="home">
+<article *ngIf="user !== undefined" class="home">
   <nz-tabset nzTabPosition="bottom" nzSize="large" [nzSelectedIndex]="tabSelected">
 
     <nz-tab [nzTitle]="routineTemplate">
@@ -8,7 +8,7 @@
         <nz-page-header-subtitle>{{dayOfTheWeek}}, {{day}} de {{month}}</nz-page-header-subtitle>
         <nz-page-header-extra>
           <i nz-icon nzType="calendar" nzTheme="outline" (click)="toggleDatePicker()"></i>
-          <span nz-dropdown nzTrigger="click" [nzDropdownMenu]="networks">
+          <span *ngIf="currentNetwork !== null" nz-dropdown nzTrigger="click" [nzDropdownMenu]="networks">
             <nz-avatar style="margin-left: 20px" nzSize="small" nzIcon="team" [nzSrc]="currentNetwork.avatar"></nz-avatar>
           </span>
           <nz-dropdown-menu #networks="nzDropdownMenu">

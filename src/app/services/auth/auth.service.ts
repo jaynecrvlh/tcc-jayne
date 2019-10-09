@@ -69,6 +69,7 @@ export class AuthService {
   logoff = () => {
     this.angularFireAuth.auth.signOut();
     localStorage.removeItem("tccJayneUser");
+    localStorage.removeItem("tccJayneNetwork");
     this.router.navigate(['']);
   }
 }
