@@ -13,6 +13,8 @@ import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { TextMaskModule } from 'angular2-text-mask';
 
 import { LoginComponent } from './pages/login/login.component';
 import { LogoComponent } from './components/logo/logo.component';
@@ -22,6 +24,7 @@ import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { RegisterNetworkComponent } from './pages/register-network/register-network.component';
 import { NetworkComponent } from './pages/network/network.component';
 import { RegisterTaskComponent } from './pages/register-task/register-task.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 registerLocaleData(pt);
 
@@ -47,7 +50,10 @@ registerLocaleData(pt);
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    ClickOutsideModule,
+    TextMaskModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [{ provide: NZ_I18N, useValue: pt_BR }],
   bootstrap: [AppComponent]

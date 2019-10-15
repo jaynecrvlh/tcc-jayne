@@ -7,7 +7,7 @@
         <nz-page-header-title>Rotina</nz-page-header-title>
         <nz-page-header-subtitle>{{dayOfTheWeek}}, {{day}} de {{month}}</nz-page-header-subtitle>
         <nz-page-header-extra>
-          <i nz-icon nzType="calendar" nzTheme="outline" (click)="toggleDatePicker()"></i>
+          <i nz-icon class="datePickerBtn" nzType="calendar" nzTheme="outline" (click)="toggleDatePicker()"></i>
           <span *ngIf="currentNetwork !== null" nz-dropdown nzTrigger="click" [nzDropdownMenu]="networks">
             <nz-avatar style="margin-left: 20px" nzSize="small" nzIcon="team" [nzSrc]="currentNetwork.avatar"></nz-avatar>
           </span>
@@ -20,7 +20,7 @@
           </nz-dropdown-menu>
         </nz-page-header-extra>
       </nz-page-header>
-      <nz-date-picker nzDropdownClassName="routine-date-picker" [nzOpen]="openDatePicker" [(ngModel)]="date" (ngModelChange)="getTasks($event)"></nz-date-picker>
+      <nz-date-picker nzDropdownClassName="routine-date-picker" [nzOpen]="openDatePicker" [(ngModel)]="date" (ngModelChange)="getTasks($event)" (clickOutside)="openDatePicker ? closeDatePicker() : null" [excludeBeforeClick]="true" [exclude]="'.datePickerBtn'"></nz-date-picker>
       <section class="home__routine__list">
         <nz-list [nzDataSource]="tasks" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" [nzNoResult]="noTasks">
           <ng-template #item let-item>
@@ -51,7 +51,7 @@
           </ng-template>
         </nz-list>
       </section>
-      <button class="home__routine__add-btn" nz-button nzType="primary" nzSize="large" nzShape="circle" [routerLink]="['/register-task']"><i nz-icon nzType="plus"></i></button>
+      <button *ngIf="currentNetwork != null" class="home__routine__add-btn" nz-button nzType="primary" nzSize="large" nzShape="circle" [routerLink]="['/register-task']"><i nz-icon nzType="plus"></i></button>
     </nz-tab>
 
     <nz-tab [nzTitle]="profileTemplate">

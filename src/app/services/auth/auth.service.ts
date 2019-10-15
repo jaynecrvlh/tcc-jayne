@@ -59,7 +59,7 @@ export class AuthService {
           []
         )
         this.userService.currentUser = user;
-        this.router.navigate([url, 'profile']);
+        this.router.navigate([url, 'routine']);
         localStorage.setItem("tccJayneUser", JSON.stringify(user));
       },
       error => this.getCurrentUser(id, url)

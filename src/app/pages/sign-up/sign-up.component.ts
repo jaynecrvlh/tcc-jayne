@@ -16,6 +16,7 @@ export class SignUpComponent implements OnInit {
   email: string;
   password: string;
   validateForm: FormGroup;
+  isSpinning = false;
 
   registerUser(): void {
     for (const i in this.validateForm.controls) {
@@ -23,12 +24,15 @@ export class SignUpComponent implements OnInit {
       this.validateForm.controls[i].updateValueAndValidity();
     }
 
-    this.registerService.user.setPhoto(this.avatarUrl);
-    this.registerService.user.setFirstName(this.firstName);
-    this.registerService.user.setLastName(this.lastName);
-    this.registerService.user.setEmail(this.email);
-    this.registerService.user.setPassword(this.password);
-    this.registerService.registerUser();
+    if(this.validateForm.valid) {
+      this.registerService.user.setPhoto(this.avatarUrl != undefined ? this.avatarUrl : "");
+      this.registerService.user.setFirstName(this.firstName);
+      this.registerService.user.setLastName(this.lastName);
+      this.registerService.user.setEmail(this.email);
+      this.registerService.user.setPassword(this.password);
+      this.isSpinning = true;
+      this.registerService.registerUser();
+    }
   }
 
   updateConfirmValidator(): void {

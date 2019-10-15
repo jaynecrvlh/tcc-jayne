@@ -19,6 +19,8 @@ export class RegisterNetworkComponent implements OnInit {
   specialNeeds: Array<string>;
   interests: Array<string>;
 
+  dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+
   validateForm: FormGroup;
 
   listOfBloodType = [
@@ -293,12 +295,12 @@ export class RegisterNetworkComponent implements OnInit {
     }
 
     if(this.validateForm.valid) {
-      this.networkService.network.setAvatar(this.avatarUrl);
+      this.networkService.network.setAvatar(this.avatarUrl != undefined ? this.avatarUrl : "");
       this.networkService.network.setName(this.name);
       this.networkService.network.setDateOfBirth(this.dateOfBirth);
       this.networkService.network.setGenre(this.genre);
       this.networkService.network.setBloodType(this.bloodType);
-      this.networkService.network.setSpecialNeeds(this.specialNeeds);
+      this.networkService.network.setSpecialNeeds(this.specialNeeds != undefined ? this.specialNeeds : []);
       this.networkService.network.setInterests(this.interests);
       this.networkService.registerNetwork();
     }
@@ -312,7 +314,7 @@ export class RegisterNetworkComponent implements OnInit {
       dateOfBirth: [null, [Validators.required]],
       genre: [null, [Validators.required]],
       bloodType: [null, [Validators.required]],
-      specialNeeds: [null, [Validators.required]],
+      specialNeeds: [null, null],
       interests: [null, [Validators.required]]
     });
   }

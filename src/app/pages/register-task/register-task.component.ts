@@ -24,6 +24,9 @@ export class RegisterTaskComponent implements OnInit {
     photo:string
   };
 
+  dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+  timeMask = [/\d/, /\d/, ':', /\d/, /\d/];
+
   listOfCategories = [
     {
       label: 'Medicações',
@@ -191,7 +194,7 @@ export class RegisterTaskComponent implements OnInit {
       this.taskService.task.setName(this.name);
       this.taskService.task.setDate(this.date);
       this.taskService.task.setTime(this.time);
-      this.taskService.task.setDescription(this.description);
+      this.taskService.task.setDescription(this.description != undefined ? this.description : "Sem descrição" );
       this.taskService.task.setResponsible(this.responsible);
       this.taskService.registerTask();
     }
@@ -205,7 +208,7 @@ export class RegisterTaskComponent implements OnInit {
       name: [null, [Validators.required]],
       date: [null, [Validators.required]],
       time: [null, [Validators.required]],
-      description: [null, [Validators.required]],
+      description: [null, null],
       responsible: [null, [Validators.required]]
     });
 

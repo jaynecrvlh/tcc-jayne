@@ -1,63 +1,65 @@
-<article class="sign-up">
-  <section class="sign-up__container">
-    <form class="sign-up__container__form" nz-form [formGroup]="validateForm" (ngSubmit)="registerUser()">
-      <div class="sign-up__container__form__upload-photo">
-        <div class="sign-up__container__form__upload-photo__container">
-          <nz-avatar [nzSize]="100" nzIcon="camera" [nzSrc]="avatarUrl"></nz-avatar>
-          <input class="sign-up__container__form__upload-photo__container__file-picker" type="file" accept=".png, .jpg, .jpeg" (change)="changeProfilePic($event)">
-        </div>
-      </div>
-      <nz-form-item>
-        <nz-form-control nzErrorTip="Informe seu nome">
-          <nz-input-group nzPrefixIcon="user">
-            <input type="text" nz-input formControlName="firstName" placeholder="Nome" [(ngModel)]="firstName" nzRequired/>
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-control nzErrorTip="Informe seu sobrenome">
-          <nz-input-group nzPrefixIcon="user">
-            <input type="text" nz-input formControlName="lastName" placeholder="Sobrenome" [(ngModel)]="lastName" nzRequired/>
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-control nzErrorTip="E-mail inválido">
-          <nz-input-group nzPrefixIcon="mail">
-            <input type="email" nz-input formControlName="email" placeholder="E-mail" [(ngModel)]="email" nzRequired/>
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-control nzErrorTip="Digite uma senha!">
-          <nz-input-group nzPrefixIcon="lock">
-            <input id="password" type="password" nz-input formControlName="password" (ngModelChange)="updateConfirmValidator()" [(ngModel)]="password" placeholder="Senha" nzRequired/>
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-control [nzErrorTip]="errorTpl">
-          <nz-input-group nzPrefixIcon="lock">
-            <input id="checkPassword" type="password" nz-input formControlName="checkPassword" placeholder="Confirmar senha" nzRequired/>
-            <ng-template #errorTpl let-control>
-              <ng-container *ngIf="control.hasError('required')">
-                Confirme sua senha
-              </ng-container>
-              <ng-container *ngIf="control.hasError('confirm')">
-                As senhas não correspondem
-              </ng-container>
-            </ng-template>
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-control>
-          <button nz-button class="sign-up__container__form__button" [nzType]="'primary'" nzSize="large">Criar conta</button>
-          <div class="sign-up__container__form__login">
-            <a [routerLink]="['/']">Já possui uma conta? <b>Faça login</b></a>
+<nz-spin [nzSpinning]="isSpinning" nzTip="Criando conta...">
+  <article class="sign-up">
+    <section class="sign-up__container">
+      <form class="sign-up__container__form" nz-form [formGroup]="validateForm" (ngSubmit)="registerUser()">
+        <div class="sign-up__container__form__upload-photo">
+          <div class="sign-up__container__form__upload-photo__container">
+            <nz-avatar [nzSize]="100" nzIcon="camera" [nzSrc]="avatarUrl"></nz-avatar>
+            <input class="sign-up__container__form__upload-photo__container__file-picker" type="file" accept=".png, .jpg, .jpeg" (change)="changeProfilePic($event)">
           </div>
-        </nz-form-control>
-      </nz-form-item>
-    </form>
-  </section>
-</article>
+        </div>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Informe seu nome">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input formControlName="firstName" placeholder="Nome" [(ngModel)]="firstName" nzRequired/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Informe seu sobrenome">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input formControlName="lastName" placeholder="Sobrenome" [(ngModel)]="lastName" nzRequired/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="E-mail inválido">
+            <nz-input-group nzPrefixIcon="mail">
+              <input type="email" nz-input formControlName="email" placeholder="E-mail" [(ngModel)]="email" nzRequired/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Digite uma senha!">
+            <nz-input-group nzPrefixIcon="lock">
+              <input id="password" type="password" nz-input formControlName="password" (ngModelChange)="updateConfirmValidator()" [(ngModel)]="password" placeholder="Senha" nzRequired/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-input-group nzPrefixIcon="lock">
+              <input id="checkPassword" type="password" nz-input formControlName="checkPassword" placeholder="Confirmar senha" nzRequired/>
+              <ng-template #errorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  Confirme sua senha
+                </ng-container>
+                <ng-container *ngIf="control.hasError('confirm')">
+                  As senhas não correspondem
+                </ng-container>
+              </ng-template>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+            <button nz-button class="sign-up__container__form__button" [nzType]="'primary'" nzSize="large">Criar conta</button>
+            <div class="sign-up__container__form__login">
+              <a [routerLink]="['/']">Já possui uma conta? <b>Faça login</b></a>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </section>
+  </article>
+</nz-spin>

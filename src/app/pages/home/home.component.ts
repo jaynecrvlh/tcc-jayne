@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
   user: User;
   date = null;
   openDatePicker = false;
+  datePickerCalled = false;
   loadingNetworks = true;
   myNetworks = [];
   tasks = [];
@@ -49,14 +50,20 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService, private userService: UserService, private networkService: NetworkService, private taskService: TaskService, private router: Router, private activatedRoute:ActivatedRoute, private ngZone: NgZone) { }
 
   ngOnInit() {
+    this.currentNetwork = JSON.parse(localStorage.getItem('tccJayneNetwork'));
+    this.currentUser = JSON.parse(localStorage.getItem('tccJayneUser'));
+    
+    if(this.currentUser == null) {
+      this.router.navigate(['']);
+      return;
+    }
+
     if(this.activatedRoute.snapshot.params.tab === 'routine') {
       this.tabSelected = 0;
     }
     else {
       this.tabSelected = 1;
     }
-    this.currentNetwork = JSON.parse(localStorage.getItem('tccJayneNetwork'));
-    this.currentUser = JSON.parse(localStorage.getItem('tccJayneUser'));
 
     this.user = new User(
       this.currentUser.id,
@@ -218,6 +225,10 @@ export class HomeComponent implements OnInit {
 
   toggleDatePicker() {
     this.openDatePicker = !this.openDatePicker;
+  }
+
+  closeDatePicker() {
+    this.openDatePicker = false;
   }
 
   showCodeModal(): void {

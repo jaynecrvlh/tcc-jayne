@@ -11,28 +11,32 @@
       <nz-form-item>
         <nz-form-control nzErrorTip="Informe o nome do idoso(a)">
           <nz-input-group nzPrefixIcon="user">
-            <input type="text" nz-input formControlName="name" placeholder="Nome do idoso(a)" [(ngModel)]="name" nzRequired/>
+            <input type="text" nz-input formControlName="name" placeholder="Nome do idoso(a)*" [(ngModel)]="name" nzRequired/>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-control nzErrorTip="Informe a data de nascimento do idoso(a)">
           <nz-input-group nzPrefixIcon="calendar">
-            <input type="text" nz-input formControlName="dateOfBirth" placeholder="Data de nascimento" [(ngModel)]="dateOfBirth" nzRequired/>
+            <input type="text" nz-input formControlName="dateOfBirth" [textMask]="{mask:dateMask}" placeholder="Data de nascimento*" [(ngModel)]="dateOfBirth" nzRequired/>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label nzFor="genre">Sexo:</nz-form-label>
-        <nz-radio-group formControlName="genre" [(ngModel)]="genre" nzButtonStyle="solid" nzSize="large">
-          <label nz-radio-button nzValue="Feminino">Feminino</label>
-          <label nz-radio-button nzValue="Masculino">Masculino</label>
-        </nz-radio-group>
+        <nz-form-control nzErrorTip="Selecione o sexo do idoso(a)">
+          <nz-form-label nzFor="genre" nzRequired>Sexo:</nz-form-label>
+          <nz-radio-group formControlName="genre" [(ngModel)]="genre" nzButtonStyle="solid" nzSize="large">
+            <label nz-radio-button nzValue="Feminino">Feminino</label>
+            <label nz-radio-button nzValue="Masculino">Masculino</label>
+          </nz-radio-group>
+        </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-select formControlName="bloodType" style="width: 100%;" nzPlaceHolder="Tipo sanguíneo" [(ngModel)]="bloodType" nzSize="large">
-          <nz-option *ngFor="let option of listOfBloodType" [nzLabel]="option.label" [nzValue]="option.value"> </nz-option>
-        </nz-select>
+        <nz-form-control nzErrorTip="Selecione o tipo sanguíneo do idoso(a)">
+          <nz-select formControlName="bloodType" style="width: 100%;" nzPlaceHolder="Tipo sanguíneo*" [(ngModel)]="bloodType" nzSize="large">
+            <nz-option *ngFor="let option of listOfBloodType" [nzLabel]="option.label" [nzValue]="option.value"> </nz-option>
+          </nz-select>
+        </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-select formControlName="specialNeeds" nzMode="tags" style="width: 100%;" nzPlaceHolder="Necessidades especiais" [(ngModel)]="specialNeeds" nzSize="large">
@@ -40,11 +44,13 @@
         </nz-select>
       </nz-form-item>
       <nz-form-item>
-        <nz-select formControlName="interests" nzMode="tags" style="width: 100%;" nzPlaceHolder="Interesses" [(ngModel)]="interests" nzSize="large">
-          <nz-option-group *ngFor="let optionGroup of listOfInterests" [nzLabel]="optionGroup.label">
-            <nz-option *ngFor="let option of optionGroup.items" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
-          </nz-option-group>
-        </nz-select>
+        <nz-form-control nzErrorTip="Selecione os interesses do idoso(a)">
+          <nz-select formControlName="interests" nzMode="tags" style="width: 100%;" nzPlaceHolder="Interesses*" [(ngModel)]="interests" nzSize="large">
+            <nz-option-group *ngFor="let optionGroup of listOfInterests" [nzLabel]="optionGroup.label">
+              <nz-option *ngFor="let option of optionGroup.items" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+            </nz-option-group>
+          </nz-select>
+        </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-control>
