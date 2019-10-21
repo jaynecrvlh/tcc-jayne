@@ -2,16 +2,56 @@
   <nz-page-header (nzBack)="onBack()" nzBackIcon>
     <nz-page-header-title>{{network == undefined ? "carregando..." : network.getName()}}</nz-page-header-title>
     <nz-page-header-extra>
-      <i nz-icon nzType="more" nzTheme="outline"></i>
+      <span nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+        <i nz-icon nzType="more" nzTheme="outline"></i>
+      </span>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item>Editar rede</li>
+          <li nz-menu-item>Sair da rede</li>
+          <li nz-menu-item>Excluir rede</li>
+        </ul>
+      </nz-dropdown-menu>
     </nz-page-header-extra>
   </nz-page-header>
-  <section *ngIf="network != undefined">
-    <nz-avatar nzIcon="team" [nzSrc]="network.getAvatar()"></nz-avatar>
-    Data de nascimento: {{network.getDateOfBirth()}}<br>
-    Sexo: {{network.getGenre()}}<br>
-    Tipo sanguineo: {{network.getBloodType()}}<br>
-    Necessidades especiais: {{network.getSpecialNeeds()}}<br>
-    Interesses: {{network.getInterests()}}<br>
-    Quantidade de membros: {{network.getMembersId()}}
+  <section class="network__container" *ngIf="network != undefined">
+    <div class="network__container__main">
+      <div class="network__container__main__avatar">
+        <nz-avatar [nzSrc]="network.getAvatar()" [nzSize]="90" nzIcon="team"></nz-avatar>
+      </div>
+      <div class="network__container__main__name">{{network.getName()}}</div>
+      <div class="network__container__main__id">
+        <input id="networkCode" type="text" value="{{network.getId()}}" readonly>
+      </div>
+    </div>
+    <nz-divider nzText="Informações gerais" nzOrientation="left"></nz-divider>
+    <nz-descriptions>
+      <nz-descriptions-item nzTitle="Data de nascimento">{{network.getDateOfBirth()}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Sexo">{{network.getGenre()}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Tipo sanguíneo">{{network.getBloodType()}}</nz-descriptions-item>
+    </nz-descriptions>
+    <nz-divider nzText="Necessidades especiais" nzOrientation="left"></nz-divider>
+    <p *ngFor="let specialNeed of network.getSpecialNeeds()">{{specialNeed}}</p>
+    <nz-divider nzText="Interesses" nzOrientation="left"></nz-divider>
+    <p *ngFor="let interest of network.getInterests()">{{interest}}</p>
+    <nz-divider nzText="Membros" nzOrientation="left"></nz-divider>
+    <nz-list [nzDataSource]="listOfMembers" [nzRenderItem]="member" [nzItemLayout]="'horizontal'" [nzLoading]="loadingMembers" nzBordered>
+      <ng-template #member let-item>
+        <nz-list-item [nzActions]="item.id == network.getAdmId() ? [adm] : false">
+          <nz-list-item-meta [nzTitle]="memberName" [nzAvatar]="memberAvatar">
+            <ng-template #memberName>
+              <a>{{ item.firstName }} {{item.lastName}}</a>
+            </ng-template>
+            <ng-template #memberAvatar>
+              <nz-avatar nzSize="large" nzIcon="team" [nzSrc]="item.photo"></nz-avatar>
+            </ng-template>
+          </nz-list-item-meta>
+          <ng-template #adm><i nz-icon nzType="user" nzTheme="outline"></i> ADM</ng-template>
+        </nz-list-item>
+      </ng-template>
+    </nz-list>
+    <div class="network__container__actions">
+      <button nz-button nzType="primary" (click)="shareNetwork()" nzSize="large" nzBlock>Convidar membros</button>
+    </div>
   </section>
 </article>

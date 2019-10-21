@@ -160,7 +160,7 @@ export class RegisterNetworkComponent implements OnInit {
         },
         {
           label: 'Gospel',
-          value: 'Gospel'
+          value: 'Música Gospel'
         },
         {
           label: 'Hip Hop',

@@ -38,12 +38,14 @@ export class NetworkService {
   }
 
   signNetwork = async (userId, networkId) => {
+    console.log("signNetwork");
     let networkName = "";
     let networkAvatar = "";
     await this.angularFireDatabase.database.ref(`networks/${networkId}`).once('value')
     .then(snapshot => {
       networkName = snapshot.val().name;
       networkAvatar = snapshot.val().avatar;
+      console.log("Deu certo!");
       this.changeNetwork(networkId);
     }).catch(error => error);
     await this.userService.addNetwork({id: networkId, avatar: networkAvatar, name: networkName});
@@ -51,14 +53,15 @@ export class NetworkService {
   }
 
   changeNetwork = (networkId) => {
+    console.log("changeNetwork!");
     this.angularFireDatabase.database.ref(`networks/${networkId}`).once('value')
     .then(snapshot => {
       localStorage.setItem("tccJayneNetwork", JSON.stringify(snapshot.val()));
+      console.log("Deu certo também!");
     }).catch(error => error);
   }
 
-  getCurrentNetworkMembers = () => {
-    let currentNetwork = JSON.parse(localStorage.getItem("tccJayneNetwork"));
-    return this.angularFireDatabase.database.ref(`networks/${currentNetwork.id}`);
+  getNetworkMembers = (networkId) => {
+    return this.angularFireDatabase.database.ref(`networks/${networkId}`);
   }
 }

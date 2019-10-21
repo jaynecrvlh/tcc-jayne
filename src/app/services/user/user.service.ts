@@ -30,6 +30,7 @@ export class UserService {
   }
 
   addNetwork = (network) => {
+    console.log("addNetwork");
     return this.angularFireDatabase.database.ref(`users/${this.currentUser.getId()}/myNetworks`).push(network);
   }
 }

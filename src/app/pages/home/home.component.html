@@ -20,7 +20,18 @@
           </nz-dropdown-menu>
         </nz-page-header-extra>
       </nz-page-header>
-      <nz-date-picker nzDropdownClassName="routine-date-picker" [nzOpen]="openDatePicker" [(ngModel)]="date" (ngModelChange)="getTasks($event)" (clickOutside)="openDatePicker ? closeDatePicker() : null" [excludeBeforeClick]="true" [exclude]="'.datePickerBtn'"></nz-date-picker>
+      <nz-date-picker
+        nzDropdownClassName="routine-date-picker"
+        [nzOpen]="openDatePicker"
+        [(ngModel)]="date"
+        (ngModelChange)="getTasks($event)"
+        (clickOutside)="openDatePicker ? closeDatePicker() : null"
+        [excludeBeforeClick]="true"
+        [exclude]="'
+          .datePickerBtn,
+          .ant-calendar-panel
+        '">
+      </nz-date-picker>
       <section class="home__routine__list">
         <nz-list [nzDataSource]="tasks" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" [nzNoResult]="noTasks">
           <ng-template #item let-item>
@@ -82,10 +93,10 @@
           <div class="home__profile__container__list-of-networks__label">Minhas redes de cuidados:</div>
           <nz-list [nzDataSource]="myNetworks" [nzRenderItem]="network" [nzItemLayout]="'horizontal'" [nzLoading]="loadingNetworks" nzBordered>
             <ng-template #network let-item>
-              <nz-list-item>
+              <nz-list-item [routerLink]="['/network', item.id]">
                 <nz-list-item-meta [nzTitle]="networkTitle" [nzAvatar]="networkAvatar">
                   <ng-template #networkTitle>
-                    <a class="home__profile__container__list-of-networks__network-name" [routerLink]="['/network', item.id]">
+                    <a class="home__profile__container__list-of-networks__network-name">
                       {{ item.name }}
                     </a>
                   </ng-template>

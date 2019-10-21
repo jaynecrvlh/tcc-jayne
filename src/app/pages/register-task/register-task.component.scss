@@ -1,6 +1,8 @@
 .register-task {
   &__content {
-    padding: 30px;
+    height: calc(100vh - 57px);
+    padding: 24px;
+    overflow-y: auto;
   }
 }
 
