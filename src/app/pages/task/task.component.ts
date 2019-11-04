@@ -15,6 +15,7 @@ export class TaskComponent implements OnInit {
   task: Task;
   comments: any[] = [];
   submitting = false;
+  currentNetwork = JSON.parse(localStorage.getItem('tccJayneNetwork'));
   currentUser = JSON.parse(localStorage.getItem('tccJayneUser'));
   inputValue = '';
 
@@ -52,10 +53,10 @@ export class TaskComponent implements OnInit {
               this.comments = data.reverse();
             }
           },
-          error => console.log(error)
+          error => error
         )
       },
-      error => console.log(error)
+      error => error
     )
   }
 

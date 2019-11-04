@@ -1,8 +1,16 @@
 <article class="task">
   <nz-page-header (nzBack)="onBack()" nzBackIcon>
     <nz-page-header-title>{{task == undefined ? "carregando..." : task.getName()}}</nz-page-header-title>
-    <nz-page-header-extra>
-      <i nz-icon nzType="edit" nzTheme="outline"></i>
+    <nz-page-header-extra *ngIf="currentNetwork.admId === currentUser.id">
+      <span nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+        <i nz-icon nzType="more" nzTheme="outline"></i>
+      </span>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item>Editar tarefa</li>
+          <li nz-menu-item>Excluir tarefa</li>
+        </ul>
+      </nz-dropdown-menu>
     </nz-page-header-extra>
   </nz-page-header>
   <section *ngIf="task != undefined" class="task__container">
@@ -50,12 +58,14 @@
           </nz-form-item>
         </nz-comment-content>
       </nz-comment>
-      <button *ngIf="!task.getDone()" nz-button nzType="primary" nzSize="large" nzBlock (click)="setTaskDone(true)">
-        <i nz-icon nzType="check"></i>Marcar como realizada
-      </button>
-      <button *ngIf="task.getDone()" nz-button nzType="danger" nzSize="large" nzBlock (click)="setTaskDone(false)">
-        <i nz-icon nzType="close"></i>Marcar como não realizada
-      </button>
+      <div *ngIf="task.getResponsible().id === currentUser.id">
+        <button *ngIf="!task.getDone()" nz-button nzType="primary" nzSize="large" nzBlock (click)="setTaskDone(true)">
+          <i nz-icon nzType="check"></i>Marcar como realizada
+        </button>
+        <button *ngIf="task.getDone()" nz-button nzType="danger" nzSize="large" nzBlock (click)="setTaskDone(false)">
+          <i nz-icon nzType="close"></i>Marcar como não realizada
+        </button>
+      </div>
     </div>
   </section>
 </article>

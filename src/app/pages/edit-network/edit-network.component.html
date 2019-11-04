@@ -1,0 +1,82 @@
+<article class="edit-network">
+  <nz-page-header (nzBack)="onBack()" nzBackIcon nzTitle="Editar rede de cuidados"></nz-page-header>
+  <section class="edit-network__content">
+    <form class="edit-network__content__form" nz-form [formGroup]="validateForm" (ngSubmit)="onEditNetwork()">
+      <div class="edit-network__content__form__upload-photo">
+        <div class="edit-network__content__form__upload-photo__container">
+          <nz-avatar [nzSize]="100" nzIcon="camera" [nzSrc]="avatarUrl"></nz-avatar>
+          <input class="edit-network__content__form__upload-photo__container__file-picker" type="file" accept=".png, .jpg, .jpeg" (change)="changeProfilePic($event)">
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Informe o nome do idoso(a)">
+          <nz-input-group nzPrefixIcon="user">
+            <input type="text" nz-input formControlName="name" placeholder="Nome do idoso(a)*" [(ngModel)]="name" nzRequired/>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Informe a data de nascimento do idoso(a)">
+          <nz-input-group nzPrefixIcon="calendar">
+            <input type="text" nz-input formControlName="dateOfBirth" [textMask]="{mask:dateMask}" placeholder="Data de nascimento*" [(ngModel)]="dateOfBirth" nzRequired/>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Selecione o sexo do idoso(a)">
+          <nz-form-label nzFor="genre" nzRequired>Sexo:</nz-form-label>
+          <nz-radio-group formControlName="genre" [(ngModel)]="genre" nzButtonStyle="solid" nzSize="large">
+            <label nz-radio-button nzValue="Feminino">Feminino</label>
+            <label nz-radio-button nzValue="Masculino">Masculino</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Selecione o tipo sanguíneo do idoso(a)">
+          <nz-select formControlName="bloodType" style="width: 100%;" nzPlaceHolder="Tipo sanguíneo*" [(ngModel)]="bloodType" nzSize="large">
+            <nz-option *ngFor="let option of listOfBloodType" [nzLabel]="option.label" [nzValue]="option.value"> </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-select formControlName="specialNeeds" nzMode="tags" style="width: 100%;" nzPlaceHolder="Necessidades especiais" [(ngModel)]="specialNeeds" nzSize="large">
+          <nz-option *ngFor="let option of listOfSpecialNeeds" [nzLabel]="option.label" [nzValue]="option.value"> </nz-option>
+        </nz-select>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Selecione os interesses do idoso(a)">
+          <nz-select formControlName="interests" nzMode="tags" style="width: 100%;" nzPlaceHolder="Interesses*" [(ngModel)]="interests" nzSize="large">
+            <nz-option-group *ngFor="let optionGroup of listOfInterests" [nzLabel]="optionGroup.label">
+              <nz-option *ngFor="let option of optionGroup.items" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+            </nz-option-group>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-list *ngIf="listOfMembers.length > 0" [nzDataSource]="listOfMembers" [nzRenderItem]="member" [nzItemLayout]="'horizontal'" [nzLoading]="loadingMembers" nzBordered>
+          <ng-template #member let-item let-index="index">
+            <nz-list-item [nzActions]="[adm]">
+              <nz-list-item-meta [nzTitle]="memberName" [nzAvatar]="memberAvatar">
+                <ng-template #memberName>
+                  <a>{{ item.firstName }} {{item.lastName}}</a>
+                </ng-template>
+                <ng-template #memberAvatar>
+                  <nz-avatar nzSize="large" nzIcon="team" [nzSrc]="item.photo"></nz-avatar>
+                </ng-template>
+              </nz-list-item-meta>
+              <ng-template #adm>
+                <span *ngIf="item.id === admId"><i nz-icon nzType="user" nzTheme="outline"></i> ADM</span>
+                <i *ngIf="item.id !== admId" nz-icon nzType="close-circle" nzTheme="outline" style="font-size: 20px" (click)="removeMember(index)"></i>
+              </ng-template>
+            </nz-list-item>
+          </ng-template>
+        </nz-list>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <button nz-button class="edit-network__content__form__button" [nzType]="'primary'" nzSize="large" nzBlock>Salvar alterações</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </section>
+</article>

@@ -11,9 +11,11 @@ import { NzMessageService } from 'ng-zorro-antd';
 export class NetworkService {
 
   network: Network;
+  currentNetwork = null;
 
   constructor(private angularFireDatabase:AngularFireDatabase, private userService:UserService, private router:Router, private message:NzMessageService) {
     this.network = new Network('id', '', '', '', '', '', [], [], '', [], []);
+    this.currentNetwork = JSON.parse(localStorage.getItem("tccJayneNetwork"));
   }
 
   registerNetwork = () => {
@@ -38,14 +40,12 @@ export class NetworkService {
   }
 
   signNetwork = async (userId, networkId) => {
-    console.log("signNetwork");
     let networkName = "";
     let networkAvatar = "";
     await this.angularFireDatabase.database.ref(`networks/${networkId}`).once('value')
     .then(snapshot => {
       networkName = snapshot.val().name;
       networkAvatar = snapshot.val().avatar;
-      console.log("Deu certo!");
       this.changeNetwork(networkId);
     }).catch(error => error);
     await this.userService.addNetwork({id: networkId, avatar: networkAvatar, name: networkName});
@@ -53,15 +53,49 @@ export class NetworkService {
   }
 
   changeNetwork = (networkId) => {
-    console.log("changeNetwork!");
     this.angularFireDatabase.database.ref(`networks/${networkId}`).once('value')
     .then(snapshot => {
       localStorage.setItem("tccJayneNetwork", JSON.stringify(snapshot.val()));
-      console.log("Deu certo também!");
+      this.currentNetwork = JSON.parse(localStorage.getItem("tccJayneNetwork"));
     }).catch(error => error);
+  }
+
+  getCurrentNetworkMembers = () => {
+    let currentNetwork = JSON.parse(localStorage.getItem("tccJayneNetwork"));
+    return this.angularFireDatabase.database.ref(`networks/${currentNetwork.id}`);
   }
 
   getNetworkMembers = (networkId) => {
     return this.angularFireDatabase.database.ref(`networks/${networkId}`);
+  }
+
+  updateNetwork = (networkId, avatarUrl, name, dateOfBirth, genre, bloodType, specialNeeds, interests, membersId) => {
+    this.changeNetwork(networkId);
+    if(avatarUrl !== this.currentNetwork.avatar) {
+      this.angularFireDatabase.database.ref(`networks/${networkId}`).update({avatar: avatarUrl});
+    }
+    if(name !== this.currentNetwork.name) {
+      this.angularFireDatabase.database.ref(`networks/${networkId}`).update({name: name});
+    }
+    if(dateOfBirth !== this.currentNetwork.dateOfBirth) {
+      this.angularFireDatabase.database.ref(`networks/${networkId}`).update({dateOfBirth: dateOfBirth});
+    }
+    if(genre !== this.currentNetwork.genre) {
+      this.angularFireDatabase.database.ref(`networks/${networkId}`).update({genre: genre});
+    }
+    if(bloodType !== this.currentNetwork.bloodType) {
+      this.angularFireDatabase.database.ref(`networks/${networkId}`).update({bloodType: bloodType});
+    }
+    if(specialNeeds !== this.currentNetwork.specialNeeds) {
+      this.angularFireDatabase.database.ref(`networks/${networkId}`).update({specialNeeds: specialNeeds});
+    }
+    if(interests !== this.currentNetwork.interests) {
+      this.angularFireDatabase.database.ref(`networks/${networkId}`).update({interests: interests});
+    }
+    if(membersId.length !== Object.values(this.currentNetwork.membersId).length) {
+      this.angularFireDatabase.database.ref(`networks/${networkId}`).update({membersId: membersId});
+    }
+    this.changeNetwork(networkId);
+    this.router.navigate(['/network', networkId]);
   }
 }

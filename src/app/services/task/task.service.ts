@@ -25,9 +25,8 @@ export class TaskService {
     this.networkService.changeNetwork(currentNetwork.id);
   }
 
-  getTasksByDay = (day) => {
-    let currentNetwork = JSON.parse(localStorage.getItem("tccJayneNetwork"));
-    return this.angularFireDatabase.database.ref(`networks/${currentNetwork.id}/tasks/${day}`);
+  getTasksByDay = (day, networkId) => {
+    return this.angularFireDatabase.database.ref(`networks/${networkId}/tasks/${day}`);
   }
 
   getTaskById = (taskId:string) => {

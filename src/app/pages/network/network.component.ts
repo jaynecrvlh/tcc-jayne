@@ -14,18 +14,12 @@ export class NetworkComponent implements OnInit {
   network:Network;
   loadingMembers = true;
   listOfMembers = [];
-
   currentUser = null;
 
   constructor(private router: Router, private activatedRoute:ActivatedRoute, private networkService:NetworkService, private userService: UserService, private ngZone: NgZone) { }
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('tccJayneUser'));
-    if(this.currentUser == null) {
-      this.router.navigate(['']);
-      return;
-    }
-
     this.getNetwork();
   }
 
@@ -54,36 +48,26 @@ export class NetworkComponent implements OnInit {
           []
         );
         this.getMembers();
-
-        let signIn = true;
-        for (let i = 0; i < this.network.getMembersId().length; i++) {
-          if(this.network.getMembersId()[i] == this.currentUser.id) {
-            signIn = false;
-            console.log("Já é membro!");
-          }
-        }
-
-        if(signIn) {
-          console.log("Não é membro... adicionando a rede");
-          this.networkService.signNetwork(this.currentUser.id, this.network.getId())
-          .then(() => {
-            this.router.navigate(['networks', this.network.getId()]);
-          }).catch(error => error);
-        }
       },
-      error => console.log(error)
+      error => error
     );
   }
 
   getMembers() {
-    this.networkService.getNetworkMembers(this.network.getId())
+    this.networkService.getNetworkMembers(this.activatedRoute.snapshot.params.id)
     .on('value', snapshot => {
       if(snapshot.val() != null && snapshot.val() != undefined) {
         Object.entries(snapshot.val().membersId).map(member => this.userService.getUserInfo(member[1]).subscribe(
-          data => this.listOfMembers.push(data),
+          data => {
+            this.ngZone.run(() => {
+              this.listOfMembers.push(data);
+              if(this.listOfMembers.length === Object.keys(snapshot.val().membersId).length) {
+                this.loadingMembers = false;
+              }
+            });
+          },
           error => error
         ));
-        this.loadingMembers = false;
       }
     });
   }
@@ -95,10 +79,10 @@ export class NetworkComponent implements OnInit {
       nav.share({
         title: 'Agenda de cuidados',
         text: `Entre na rede de cuidados ${this.network.getName()}`,
-        url: `https://tcc-jayne.firebaseapp.com/network/${this.network.getId()}`,
+        url: `https://tcc-jayne.firebaseapp.com/network-invit/${this.network.getId()}`,
     })
       .then(() => console.log('Successful share'))
-      .catch((error) => console.log('Error sharing', error));
+      .catch((error) => error);
     }
     else {
       let copyText = document.getElementById("networkCode") as HTMLInputElement;
@@ -108,4 +92,5 @@ export class NetworkComponent implements OnInit {
       alert("Código da rede copiado para a área de transferência!");
     }
   }
+
 }

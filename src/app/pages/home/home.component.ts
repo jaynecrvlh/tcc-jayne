@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit {
   networkCode:string;
   tabSelected = null;
 
-  currentNetwork = null;
   currentUser = null;
 
   months = [
@@ -50,7 +49,6 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService, private userService: UserService, private networkService: NetworkService, private taskService: TaskService, private router: Router, private activatedRoute:ActivatedRoute, private ngZone: NgZone) { }
 
   ngOnInit() {
-    this.currentNetwork = JSON.parse(localStorage.getItem('tccJayneNetwork'));
     this.currentUser = JSON.parse(localStorage.getItem('tccJayneUser'));
     
     if(this.currentUser == null) {
@@ -95,12 +93,12 @@ export class HomeComponent implements OnInit {
     this.month = this.transformMonth(today.getMonth());
     this.year = String(today.getFullYear());
     this.dayOfTheWeek = this.transformDayOfTheWeek(today.getDay());
-    if(this.currentNetwork !== null) {
-      this.getTasks(today);
+    if(this.networkService.currentNetwork !== null) {
+      this.getTasks(today, this.networkService.currentNetwork.id);
     }
   }
 
-  getTasks(result: Date): void {
+  getTasks(result: Date, networkId): void {
     this.fixDate(result.toString());
     let monthPath;
     if(this.months.indexOf(this.month) + 1 < 10) {
@@ -109,7 +107,7 @@ export class HomeComponent implements OnInit {
     else {
       monthPath = this.months.indexOf(this.month) + 1;
     }
-    this.taskService.getTasksByDay(this.day + monthPath + this.year)
+    this.taskService.getTasksByDay(this.day + monthPath + this.year, networkId)
     .on("value", snapshot => {
       if(snapshot.val() !== undefined && snapshot.val() !== null) {
         this.ngZone.run(() => {
@@ -253,8 +251,7 @@ export class HomeComponent implements OnInit {
 
   switchNetwork (networkId) {
     this.networkService.changeNetwork(networkId);
-    setTimeout(() => {
-      this.currentNetwork = JSON.parse(localStorage.getItem('tccJayneNetwork'));
-    }, 1000);
+    let today = new Date();
+    this.getTasks(today, networkId);
   }
 }

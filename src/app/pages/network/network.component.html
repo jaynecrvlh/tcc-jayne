@@ -6,10 +6,10 @@
         <i nz-icon nzType="more" nzTheme="outline"></i>
       </span>
       <nz-dropdown-menu #menu="nzDropdownMenu">
-        <ul nz-menu nzSelectable>
-          <li nz-menu-item>Editar rede</li>
+        <ul *ngIf="network !== undefined" nz-menu nzSelectable>
+          <li *ngIf="network.getAdmId() === currentUser.id" [routerLink]="['/edit-network', network.getId()]" nz-menu-item>Editar rede</li>
           <li nz-menu-item>Sair da rede</li>
-          <li nz-menu-item>Excluir rede</li>
+          <li *ngIf="network.getAdmId() === currentUser.id" nz-menu-item>Excluir rede</li>
         </ul>
       </nz-dropdown-menu>
     </nz-page-header-extra>
@@ -50,7 +50,7 @@
         </nz-list-item>
       </ng-template>
     </nz-list>
-    <div class="network__container__actions">
+    <div *ngIf="network.getAdmId() === currentUser.id" class="network__container__actions">
       <button nz-button nzType="primary" (click)="shareNetwork()" nzSize="large" nzBlock>Convidar membros</button>
     </div>
   </section>

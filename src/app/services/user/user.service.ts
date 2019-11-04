@@ -10,7 +10,7 @@ export class UserService {
   currentUser:User;
 
   constructor(private angularFireDatabase:AngularFireDatabase) {
-    const user = JSON.parse(localStorage.getItem("conviverUser"));
+    const user = JSON.parse(localStorage.getItem("tccJayneUser"));
     if(user != null) {
       let obj = new User(
         user.id,
@@ -30,7 +30,6 @@ export class UserService {
   }
 
   addNetwork = (network) => {
-    console.log("addNetwork");
     return this.angularFireDatabase.database.ref(`users/${this.currentUser.getId()}/myNetworks`).push(network);
   }
 }

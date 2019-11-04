@@ -25,6 +25,8 @@ import { RegisterNetworkComponent } from './pages/register-network/register-netw
 import { NetworkComponent } from './pages/network/network.component';
 import { RegisterTaskComponent } from './pages/register-task/register-task.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { NetworkInvitComponent } from './pages/network-invit/network-invit.component';
+import { EditNetworkComponent } from './pages/edit-network/edit-network.component';
 
 registerLocaleData(pt);
 
@@ -38,7 +40,9 @@ registerLocaleData(pt);
     SignUpComponent,
     RegisterNetworkComponent,
     NetworkComponent,
-    RegisterTaskComponent
+    RegisterTaskComponent,
+    NetworkInvitComponent,
+    EditNetworkComponent
   ],
   imports: [
     BrowserModule,

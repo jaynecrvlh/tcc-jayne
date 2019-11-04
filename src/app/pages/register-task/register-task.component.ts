@@ -95,8 +95,8 @@ export class RegisterTaskComponent implements OnInit {
       value: 'Show'
     },
     {
-      label: 'Livro',
-      value: 'Livro'
+      label: 'Leitura',
+      value: 'Leitura'
     },
     {
       label: 'Computador',
@@ -220,8 +220,7 @@ export class RegisterTaskComponent implements OnInit {
   }
 
   getMembers() {
-    let currentNetwork = JSON.parse(localStorage.getItem("tccJayneNetwork"));
-    this.networkService.getNetworkMembers(currentNetwork.id)
+    this.networkService.getCurrentNetworkMembers()
     .on('value', snapshot => {
       if(snapshot.val() != null && snapshot.val() != undefined) {
         Object.entries(snapshot.val().membersId).map(member => this.userService.getUserInfo(member[1]).subscribe(

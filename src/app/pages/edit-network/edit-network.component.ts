@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { NetworkService } from 'src/app/services/network/network.service';
+import { UserService } from 'src/app/services/user/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NetworkService } from '../../services/network/network.service';
 
 @Component({
-  selector: 'app-register-network',
-  templateUrl: './register-network.component.html',
-  styleUrls: ['./register-network.component.scss']
+  selector: 'app-edit-network',
+  templateUrl: './edit-network.component.html',
+  styleUrls: ['./edit-network.component.scss']
 })
-export class RegisterNetworkComponent implements OnInit {
+export class EditNetworkComponent implements OnInit {
 
-  loadingPhoto = false;
+  loadingMembers = true;
+  listOfMembers = [];
+  currentUser = null;
+  admId:string;
+
   avatarUrl: string;
   name: string;
   dateOfBirth: string;
@@ -18,6 +23,8 @@ export class RegisterNetworkComponent implements OnInit {
   bloodType: string;
   specialNeeds: Array<string>;
   interests: Array<string>;
+
+  membersId: Array<string>;
 
   dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
@@ -296,27 +303,12 @@ export class RegisterNetworkComponent implements OnInit {
     },
   ];
 
-  onRegisterNetwork(): void {
-    for (const i in this.validateForm.controls) {
-      this.validateForm.controls[i].markAsDirty();
-      this.validateForm.controls[i].updateValueAndValidity();
-    }
+  constructor(private router: Router, private activatedRoute:ActivatedRoute, private networkService:NetworkService, private userService: UserService, private fb: FormBuilder, private ngZone: NgZone) { }
 
-    if(this.validateForm.valid) {
-      this.networkService.network.setAvatar(this.avatarUrl != undefined ? this.avatarUrl : "");
-      this.networkService.network.setName(this.name);
-      this.networkService.network.setDateOfBirth(this.dateOfBirth);
-      this.networkService.network.setGenre(this.genre);
-      this.networkService.network.setBloodType(this.bloodType);
-      this.networkService.network.setSpecialNeeds(this.specialNeeds != undefined ? this.specialNeeds : []);
-      this.networkService.network.setInterests(this.interests);
-      this.networkService.registerNetwork();
-    }
-  }
+  ngOnInit() {
+    this.currentUser = JSON.parse(localStorage.getItem('tccJayneUser'));
+    this.getNetwork();
 
-  constructor(private router: Router, private fb: FormBuilder, private networkService: NetworkService) { }
-
-  ngOnInit(): void {
     this.validateForm = this.fb.group({
       name: [null, [Validators.required]],
       dateOfBirth: [null, [Validators.required]],
@@ -328,7 +320,48 @@ export class RegisterNetworkComponent implements OnInit {
   }
 
   onBack() {
-    this.router.navigate(['/home', 'profile']);
+    this.router.navigate(['/network', this.activatedRoute.snapshot.params.id]);
+  }
+
+  getNetwork = () => {
+    const networkId = this.activatedRoute.snapshot.params.id;
+    const network = this.networkService.getNetwork(networkId);
+    let snapshot = null;
+    network.subscribe(
+      data => {
+        snapshot = data;
+        this.admId = snapshot.admId;
+        this.avatarUrl = snapshot.avatar;
+        this.name = snapshot.name;
+        this.dateOfBirth = snapshot.dateOfBirth;
+        this.genre = snapshot.genre;
+        this.bloodType = snapshot.bloodType;
+        this.specialNeeds = snapshot.specialNeeds;
+        this.interests = snapshot.interests;
+        this.membersId = Object.values(snapshot.membersId);
+      },
+      error => error
+    );
+    this.getMembers();
+  }
+
+  getMembers() {
+    this.networkService.getNetworkMembers(this.activatedRoute.snapshot.params.id)
+    .on('value', snapshot => {
+      if(snapshot.val() != null && snapshot.val() != undefined) {
+        Object.entries(snapshot.val().membersId).map(member => this.userService.getUserInfo(member[1]).subscribe(
+          data => {
+            this.ngZone.run(() => {
+              this.listOfMembers.push(data);
+              if(this.listOfMembers.length === Object.keys(snapshot.val().membersId).length) {
+                this.loadingMembers = false;
+              }
+            });
+          },
+          error => error
+        ));
+      }
+    });
   }
 
   changeProfilePic(event){
@@ -339,4 +372,25 @@ export class RegisterNetworkComponent implements OnInit {
     }, false);
     reader.readAsDataURL(profilePic);
   }
+
+  removeMember(index) {
+    this.membersId.splice(index, 1);
+    this.listOfMembers.splice(index, 1);
+  }
+
+  onEditNetwork():void {
+    for (const i in this.validateForm.controls) {
+      this.validateForm.controls[i].markAsDirty();
+      this.validateForm.controls[i].updateValueAndValidity();
+    }
+
+    if(this.validateForm.valid) {
+      this.networkService.updateNetwork(
+        this.activatedRoute.snapshot.params.id,
+        this.avatarUrl,
+        this.name,
+        this.dateOfBirth, this.genre, this.bloodType, this.specialNeeds, this.interests, this.membersId);
+    }
+  }
+
 }

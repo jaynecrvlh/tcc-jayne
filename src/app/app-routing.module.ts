@@ -8,6 +8,8 @@ import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { RegisterNetworkComponent } from './pages/register-network/register-network.component';
 import { NetworkComponent } from './pages/network/network.component';
 import { RegisterTaskComponent } from './pages/register-task/register-task.component';
+import { NetworkInvitComponent } from './pages/network-invit/network-invit.component';
+import { EditNetworkComponent } from './pages/edit-network/edit-network.component';
 
 const routes: Routes = [
   {
@@ -37,6 +39,14 @@ const routes: Routes = [
   {
     path: 'register-task',
     component: RegisterTaskComponent
+  },
+  {
+    path: 'network-invit/:id',
+    component: NetworkInvitComponent
+  },
+  {
+    path: 'edit-network/:id',
+    component: EditNetworkComponent
   }
 ];
 
