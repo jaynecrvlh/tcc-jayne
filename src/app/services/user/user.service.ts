@@ -32,4 +32,11 @@ export class UserService {
   addNetwork = (network) => {
     return this.angularFireDatabase.database.ref(`users/${this.currentUser.getId()}/myNetworks`).push(network);
   }
+
+  removeNetwork = (userId, networkId) => {
+    return this.angularFireDatabase.database.ref(`users/${userId}/myNetworks/`).orderByChild('id').equalTo(networkId).once('value', (snapshot) => {
+      const key = Object.keys(snapshot.val())[0];
+      this.angularFireDatabase.database.ref(`users/${userId}/myNetworks/${key}`).remove();
+    });
+  }
 }

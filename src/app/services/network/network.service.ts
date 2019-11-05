@@ -92,8 +92,19 @@ export class NetworkService {
     if(interests !== this.currentNetwork.interests) {
       this.angularFireDatabase.database.ref(`networks/${networkId}`).update({interests: interests});
     }
-    if(membersId.length !== Object.values(this.currentNetwork.membersId).length) {
+
+    let currentMembersId = Object.values(this.currentNetwork.membersId);
+    if(membersId.length !== currentMembersId.length) {
+      console.log("Lista diferente");
       this.angularFireDatabase.database.ref(`networks/${networkId}`).update({membersId: membersId});
+
+      for(let i=0; i < currentMembersId.length; i++) {
+        console.log(currentMembersId[i]);
+        if(!membersId.includes(currentMembersId[i])) {
+          console.log("Não inclui na lista");
+          this.userService.removeNetwork(currentMembersId[i], networkId);
+        }
+      }
     }
     this.changeNetwork(networkId);
     this.router.navigate(['/network', networkId]);
