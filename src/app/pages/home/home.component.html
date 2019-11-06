@@ -8,8 +8,8 @@
         <nz-page-header-subtitle>{{dayOfTheWeek}}, {{day}} de {{month}}</nz-page-header-subtitle>
         <nz-page-header-extra>
           <i nz-icon class="datePickerBtn" nzType="calendar" nzTheme="outline" (click)="toggleDatePicker()"></i>
-          <span *ngIf="networkService.currentNetwork !== null" nz-dropdown nzTrigger="click" [nzDropdownMenu]="networks">
-            <nz-avatar style="margin-left: 20px" nzSize="small" nzIcon="team" [nzSrc]="networkService.currentNetwork.avatar"></nz-avatar>
+          <span *ngIf="currentNetwork !== null" nz-dropdown nzTrigger="click" [nzDropdownMenu]="networks">
+            <nz-avatar style="margin-left: 20px" nzSize="small" nzIcon="team" [nzSrc]="currentNetwork.avatar"></nz-avatar>
           </span>
           <nz-dropdown-menu #networks="nzDropdownMenu">
             <ul nz-menu nzSelectable>
@@ -20,9 +20,9 @@
           </nz-dropdown-menu>
         </nz-page-header-extra>
       </nz-page-header>
-      <nz-date-picker nzDropdownClassName="routine-date-picker" [nzOpen]="openDatePicker" [(ngModel)]="date" (ngModelChange)="getTasks($event, networkService.currentNetwork.id)" (clickOutside)="openDatePicker ? closeDatePicker() : null" [excludeBeforeClick]="true" [exclude]="'.datePickerBtn, .ant-calendar-panel'"></nz-date-picker>
+      <nz-date-picker nzDropdownClassName="routine-date-picker" [nzOpen]="openDatePicker" [(ngModel)]="date" (ngModelChange)="getTasks($event)" (clickOutside)="openDatePicker ? closeDatePicker() : null" [excludeBeforeClick]="true" [exclude]="'.datePickerBtn, .ant-calendar-panel'"></nz-date-picker>
       <section class="home__routine__list">
-        <nz-list [nzDataSource]="tasks" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" [nzNoResult]="noTasks">
+        <nz-list [nzDataSource]="tasks" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" [nzNoResult]="noTasks" [nzLoading]="loadingTasks">
           <ng-template #item let-item>
             <nz-list-item [nzExtra]="taskTag" class="home__routine__list__item" [ngClass]="{'task-done': item.done}" [routerLink]="['/task', item.id]">
               <nz-list-item-meta [nzTitle]="taskTitle" [nzAvatar]="taskAvatar" [nzDescription]="'Responsável: ' + item.responsible.firstName">
@@ -40,7 +40,13 @@
               </nz-list-item-meta>
               <ng-template #taskTag>
                 <div class="home__routine__list__item__hour-container">
-                  <nz-tag [nzColor]="item.category.color">{{item.category}}</nz-tag>
+                  <nz-tag [nzColor]="
+                    item.category === 'Atividades físicas' ? 'green' :
+                    item.category === 'Medicações' ? 'red' :
+                    item.category === 'Compromissos' ? 'purple' :
+                    item.category === 'Lazer/recreativas' ? 'blue' :
+                    item.category === 'Refeições' ? 'gold' : ''
+                  ">{{item.category}}</nz-tag>
                   <div class="home__routine__list__item__hour-container__hour">{{item.time}}</div>
                 </div>
               </ng-template>
@@ -51,7 +57,7 @@
           </ng-template>
         </nz-list>
       </section>
-      <button *ngIf="networkService.currentNetwork != null && networkService.currentNetwork.admId === currentUser.id" class="home__routine__add-btn" nz-button nzType="primary" nzSize="large" nzShape="circle" [routerLink]="['/register-task']"><i nz-icon nzType="plus"></i></button>
+      <button *ngIf="currentNetwork != null && currentNetwork.admId === currentUser.id" class="home__routine__add-btn" nz-button nzType="primary" nzSize="large" nzShape="circle" [routerLink]="['/register-task']"><i nz-icon nzType="plus"></i></button>
     </nz-tab>
 
     <nz-tab [nzTitle]="profileTemplate">

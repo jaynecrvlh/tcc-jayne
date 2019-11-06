@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
   tabSelected = null;
 
   currentUser = null;
+  currentNetwork = null;
 
   months = [
     'janeiro',
@@ -46,10 +47,13 @@ export class HomeComponent implements OnInit {
   year: string;
   dayOfTheWeek: string;
 
+  loadingTasks = true;
+
   constructor(private authService: AuthService, private userService: UserService, private networkService: NetworkService, private taskService: TaskService, private router: Router, private activatedRoute:ActivatedRoute, private ngZone: NgZone) { }
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('tccJayneUser'));
+    this.currentNetwork = this.networkService.currentNetwork;
     
     if(this.currentUser == null) {
       this.router.navigate(['']);
@@ -79,7 +83,6 @@ export class HomeComponent implements OnInit {
         this.ngZone.run(() => {
           const networks = Object.entries(snapshot.val()).map(e => Object.assign(e[1], { key: e[0] }));
           this.myNetworks = networks;
-          this.networkService.changeNetwork(this.myNetworks[0].id);
           this.loadingNetworks = false;
         });
       }
@@ -93,12 +96,13 @@ export class HomeComponent implements OnInit {
     this.month = this.transformMonth(today.getMonth());
     this.year = String(today.getFullYear());
     this.dayOfTheWeek = this.transformDayOfTheWeek(today.getDay());
-    if(this.networkService.currentNetwork !== null) {
-      this.getTasks(today, this.networkService.currentNetwork.id);
+    if(this.currentNetwork !== null) {
+      this.getTasks(today);
     }
   }
 
-  getTasks(result: Date, networkId): void {
+  getTasks(result: Date): void {
+    console.log("pegando tarefas da rede: " + this.currentNetwork.id);
     this.fixDate(result.toString());
     let monthPath;
     if(this.months.indexOf(this.month) + 1 < 10) {
@@ -107,12 +111,13 @@ export class HomeComponent implements OnInit {
     else {
       monthPath = this.months.indexOf(this.month) + 1;
     }
-    this.taskService.getTasksByDay(this.day + monthPath + this.year, networkId)
+    this.taskService.getTasksByDay(this.day + monthPath + this.year, this.currentNetwork.id)
     .on("value", snapshot => {
       if(snapshot.val() !== undefined && snapshot.val() !== null) {
         this.ngZone.run(() => {
           const tasks = Object.entries(snapshot.val()).map(e => Object.assign(e[1], { key: e[0] }));
-          this.tasks = tasks;
+          this.tasks = tasks.sort(this.sortTasksByTime);
+          this.loadingTasks = false;
         });
       }
       else {
@@ -251,7 +256,13 @@ export class HomeComponent implements OnInit {
 
   switchNetwork (networkId) {
     this.networkService.changeNetwork(networkId);
-    let today = new Date();
-    this.getTasks(today, networkId);
+    this.loadingTasks = true;
+    setTimeout(() => {
+      window.location.reload();
+    }, 5000);
+  }
+
+  sortTasksByTime(a, b) {
+    return Number(a.id) - Number(b.id);
   }
 }
