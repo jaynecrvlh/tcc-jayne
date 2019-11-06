@@ -1,12 +1,13 @@
-.sign-up {
+.edit-profile {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 
   &__container {
-    padding: 30px;
+    height: calc(100% - 57px);
+    padding: 24px;
     box-sizing: border-box;
+    overflow-y: auto;
 
     &__form {
       &__upload-photo {
@@ -34,11 +35,6 @@
       &__button {
         margin-top: 10px;
         width: 100%;
-      }
-
-      &__login {
-        margin-top: 10px;
-        text-align: center;
       }
     }
   }

@@ -1,28 +1,30 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { User } from 'src/app/models/user'; 
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  currentUser:User;
+  // user:User;
+  currentUser = null;
 
-  constructor(private angularFireDatabase:AngularFireDatabase) {
-    const user = JSON.parse(localStorage.getItem("tccJayneUser"));
-    if(user != null) {
-      let obj = new User(
-        user.id,
-        user.photo,
-        user.firstName,
-        user.lastName, 
-        user.email,
-        "secretPassword",
-        []
-      )
-      this.currentUser = obj;
-    }
+  constructor(private angularFireDatabase:AngularFireDatabase, private router: Router) {
+    this.currentUser = JSON.parse(localStorage.getItem("tccJayneUser"));
+    // if(this.currentUser != null) {
+    //   let obj = new User(
+    //     user.id,
+    //     user.photo,
+    //     user.firstName,
+    //     user.lastName, 
+    //     user.email,
+    //     "secretPassword",
+    //     []
+    //   )
+    //   this.user = obj;
+    // }
   }
 
   getUserInfo = (userId) => {
@@ -30,7 +32,7 @@ export class UserService {
   }
 
   addNetwork = (network) => {
-    return this.angularFireDatabase.database.ref(`users/${this.currentUser.getId()}/myNetworks`).push(network);
+    return this.angularFireDatabase.database.ref(`users/${this.currentUser.id}/myNetworks`).push(network);
   }
 
   removeNetwork = (userId, networkId) => {
@@ -38,5 +40,27 @@ export class UserService {
       const key = Object.keys(snapshot.val())[0];
       this.angularFireDatabase.database.ref(`users/${userId}/myNetworks/${key}`).remove();
     });
+  }
+
+  changeUserLocalData = () => {
+    this.angularFireDatabase.database.ref(`users/${this.currentUser.id}`).once('value')
+    .then(snapshot => {
+      localStorage.setItem("tccJayneUser", JSON.stringify(snapshot.val()));
+      this.currentUser = JSON.parse(localStorage.getItem("tccJayneUser"));
+    }).catch(error => error);
+  }
+
+  updateUser = (photo, firstName, lastName) => {
+    if(photo !== this.currentUser.photo) {
+      this.angularFireDatabase.database.ref(`users/${this.currentUser.id}`).update({photo: photo});
+    }
+    if(firstName !== this.currentUser.firstName) {
+      this.angularFireDatabase.database.ref(`users/${this.currentUser.id}`).update({firstName: firstName});
+    }
+    if(lastName !== this.currentUser.lastName) {
+      this.angularFireDatabase.database.ref(`users/${this.currentUser.id}`).update({lastName: lastName});
+    }
+    this.changeUserLocalData();
+    this.router.navigate(['/home', 'profile']);
   }
 }

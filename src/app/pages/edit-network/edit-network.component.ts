@@ -71,6 +71,10 @@ export class EditNetworkComponent implements OnInit {
       value: 'Autismo'
     },
     {
+      label: 'Cardíaco',
+      value: 'Cardíaco'
+    },
+    {
       label: 'Hipertensão',
       value: 'Hipertensão'
     },

@@ -10,6 +10,7 @@ import { NetworkComponent } from './pages/network/network.component';
 import { RegisterTaskComponent } from './pages/register-task/register-task.component';
 import { NetworkInvitComponent } from './pages/network-invit/network-invit.component';
 import { EditNetworkComponent } from './pages/edit-network/edit-network.component';
+import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
 
 const routes: Routes = [
   {
@@ -47,6 +48,10 @@ const routes: Routes = [
   {
     path: 'edit-network/:id',
     component: EditNetworkComponent
+  },
+  {
+    path: 'edit-profile/:id',
+    component: EditProfileComponent
   }
 ];
 

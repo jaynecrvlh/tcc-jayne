@@ -64,7 +64,7 @@
           </span>
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu nzSelectable>
-              <li nz-menu-item>Editar perfil</li>
+              <li nz-menu-item [routerLink]="['/edit-profile', currentUser.id]">Editar perfil</li>
               <li (click)="onLogout()" nz-menu-item>Sair</li>
             </ul>
           </nz-dropdown-menu>

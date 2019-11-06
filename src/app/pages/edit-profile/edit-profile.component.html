@@ -1,0 +1,33 @@
+<article class="edit-profile">
+  <nz-page-header (nzBack)="onBack()" nzBackIcon nzTitle="Editar perfil"></nz-page-header>
+  <section class="edit-profile__container">
+    <form class="edit-profile__container__form" nz-form [formGroup]="validateForm" (ngSubmit)="updateProfile()">
+      <div class="edit-profile__container__form__upload-photo">
+        <div class="edit-profile__container__form__upload-photo__container">
+          <nz-avatar [nzSize]="100" nzIcon="camera" [nzSrc]="photo"></nz-avatar>
+          <input class="edit-profile__container__form__upload-photo__container__file-picker" type="file" accept=".png, .jpg, .jpeg" (change)="changeProfilePic($event)">
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Informe seu nome">
+          <nz-input-group nzPrefixIcon="user">
+            <input type="text" nz-input formControlName="firstName" placeholder="Nome" [(ngModel)]="firstName" nzRequired/>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Informe seu sobrenome">
+          <nz-input-group nzPrefixIcon="user">
+            <input type="text" nz-input formControlName="lastName" placeholder="Sobrenome" [(ngModel)]="lastName" nzRequired/>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <button nz-button class="edit-profile__container__form__button" [nzType]="'primary'" nzSize="large">Salvar edições</button>
+          <button nz-button class="edit-profile__container__form__button" [nzType]="'default'" nzSize="large" (click)="onBack()">Cancelar</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </section>
+</article>
