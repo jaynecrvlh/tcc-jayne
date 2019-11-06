@@ -87,6 +87,10 @@ export class RegisterTaskComponent implements OnInit {
       value: 'Cinema'
     },
     {
+      label: 'Filme',
+      value: 'Filme'
+    },
+    {
       label: 'Teatro',
       value: 'Teatro'
     },
