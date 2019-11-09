@@ -4,6 +4,7 @@ import { UserService } from '../user/user.service';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { NzMessageService } from 'ng-zorro-antd';
+import { NetworkService } from '../network/network.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AuthService {
 
   alertMessage:string;
 
-  constructor(private angularFireAuth:AngularFireAuth, private userService:UserService, private router:Router, private message:NzMessageService) {}
+  constructor(private angularFireAuth:AngularFireAuth, private userService:UserService, private router:Router, private message:NzMessageService, private networkService: NetworkService) {}
 
   login = (credentials) => {
     this.angularFireAuth.auth.signInWithEmailAndPassword(credentials.email, credentials.password)
@@ -56,7 +57,7 @@ export class AuthService {
           snapshot.lastName, 
           snapshot.email,
           "secretPassword",
-          []
+          snapshot.myNetworks
         )
         this.userService.currentUser = user;
         this.router.navigate([url, 'routine']);

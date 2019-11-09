@@ -84,6 +84,9 @@ export class HomeComponent implements OnInit {
           const networks = Object.entries(snapshot.val()).map(e => Object.assign(e[1], { key: e[0] }));
           this.myNetworks = networks;
           this.loadingNetworks = false;
+          if(this.currentNetwork === undefined) {
+            this.networkService.changeNetwork(this.myNetworks[0].id);
+          }
         });
       }
       else {
@@ -102,7 +105,7 @@ export class HomeComponent implements OnInit {
   }
 
   getTasks(result: Date): void {
-    console.log("pegando tarefas da rede: " + this.currentNetwork.id);
+    this.loadingTasks = true;
     this.fixDate(result.toString());
     let monthPath;
     if(this.months.indexOf(this.month) + 1 < 10) {
@@ -123,6 +126,7 @@ export class HomeComponent implements OnInit {
       else {
         this.ngZone.run(() => {
           this.tasks = [];
+          this.loadingTasks = false;
         });
       }
     });
