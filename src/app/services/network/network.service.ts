@@ -53,7 +53,6 @@ export class NetworkService {
   }
 
   changeNetwork = (networkId) => {
-    console.log(networkId);
     this.angularFireDatabase.database.ref(`networks/${networkId}`).once('value')
     .then(snapshot => {
       localStorage.setItem("tccJayneNetwork", JSON.stringify(snapshot.val()));

@@ -79,7 +79,7 @@ export class TaskComponent implements OnInit {
 
   setTaskDone(done:boolean): void {
     let message = "Deseja marcar esta atividade como realizada?";
-    if(done) {
+    if(!done) {
       message = "Deseja marcar esta atividade como não realizada?";
     }
     this.modalService.confirm({

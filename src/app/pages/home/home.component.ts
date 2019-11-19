@@ -108,6 +108,7 @@ export class HomeComponent implements OnInit {
   }
 
   getTasks(result: Date): void {
+    this.loadingTasks = true;
     this.fixDate(result.toString());
     let monthPath;
     if(this.months.indexOf(this.month) + 1 < 10) {
