@@ -53,11 +53,14 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('tccJayneUser'));
-    this.currentNetwork = this.networkService.currentNetwork;
-    
+
     if(this.currentUser == null) {
       this.router.navigate(['']);
       return;
+    }
+
+    if(this.networkService.currentNetwork !== null) {
+      this.currentNetwork = this.networkService.currentNetwork;
     }
 
     if(this.activatedRoute.snapshot.params.tab === 'routine') {
@@ -84,6 +87,9 @@ export class HomeComponent implements OnInit {
           const networks = Object.entries(snapshot.val()).map(e => Object.assign(e[1], { key: e[0] }));
           this.myNetworks = networks;
           this.loadingNetworks = false;
+          if(this.currentNetwork == null) {
+            this.networkService.changeNetwork(this.myNetworks[0].id);
+          }
         });
       }
       else {
@@ -102,7 +108,6 @@ export class HomeComponent implements OnInit {
   }
 
   getTasks(result: Date): void {
-    console.log("pegando tarefas da rede: " + this.currentNetwork.id);
     this.fixDate(result.toString());
     let monthPath;
     if(this.months.indexOf(this.month) + 1 < 10) {
@@ -123,6 +128,7 @@ export class HomeComponent implements OnInit {
       else {
         this.ngZone.run(() => {
           this.tasks = [];
+          this.loadingTasks = false;
         });
       }
     });
